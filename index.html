@@ -49,6 +49,10 @@
     .satellite-panel p{color:#627566;font-size:12px;line-height:1.55;margin:4px 0 0}
     .satellite-panel a{white-space:nowrap;display:inline-flex;align-items:center;gap:5px;color:#325f42;font-size:12px;font-weight:800;text-decoration:none;border-bottom:1px solid #325f4277;padding:5px 0}
     .satellite-panel .sat-pill{display:inline-block;background:#f0e4d0;color:#815b2d;padding:4px 9px;border-radius:20px;font:700 10px var(--sans)}
+    .sat-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0;padding:10px;border-radius:10px;background:#e9f1e6;border:1px solid #dfe8db}
+    .sat-metrics small{display:block;font-size:10px;color:#6b7c6c;margin-bottom:4px}
+    .sat-metrics strong{font-size:13px;color:#2b4b32;font-weight:700}
+    .satellite-panel .sat-foot{font-size:11px;color:#65796a;margin-top:8px}
     @media(max-width:600px){.satellite-panel{grid-template-columns:1fr}.map-view-switch{top:9px;left:9px}.map-view-switch button{padding:8px 10px}}
   </style>
 </head>
@@ -130,21 +134,38 @@
 
     function satellitePanel(p){
       const observation=state.satellite[p.id];
-      // Vetted data only: a pipeline must explicitly mark observations validated; never infer leaf color from scene cloud cover.
-      const ready=observation && observation.validated===true && /^\d{4}-\d{2}-\d{2}$/.test(observation.observed_on||'') && ['early','turning','peak','late'].includes(observation.stage) && Number.isFinite(observation.confidence) && observation.confidence>=0 && observation.confidence<=1;
-      const label=ready?`${{early:'Early color',turning:'Turning',peak:'Near peak',late:'Past peak'}[observation.stage]} · observed ${fmt(observation.observed_on)}`:'Not yet verified';
-      const desc=ready?`A separate analysis recorded this stage with ${Math.round(observation.confidence*100)}% model confidence. Satellite interpretation is experimental and may be affected by clouds, forest cover and terrain.`:'No processed, validated satellite observation is available for this destination yet. Folha’s color predictions remain based on seasonal timing and weather.';
-      return `<aside class="satellite-panel" aria-label="Sentinel-2 satellite observation"><div><div class="eyebrow">🛰️ Sentinel-2 · Satellite check</div><h4>Satellite status: <span class="sat-pill">${label}</span></h4><p>${desc}</p></div><a href="https://browser.dataspace.copernicus.eu/" target="_blank" rel="noopener noreferrer" title="Open Copernicus Browser and search for ${p.name}">Explore imagery ↗</a></aside>`;
+      const experimental=observation?.status==='experimental' && observation.validated===false
+        && observation.metrics && /^\d{4}-\d{2}-\d{2}$/.test(observation.latest_date||'')
+        && Number.isFinite(observation.metrics.ndvi_difference)
+        && Number.isFinite(observation.metrics.red_green_ratio_difference);
+      const formatDelta=v=>(v>0?'+':'')+Number(v).toFixed(3);
+      const escapeHtml=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+      const sourceLink='<a href="https://browser.dataspace.copernicus.eu/" target="_blank" rel="noopener noreferrer">Explore imagery ↗</a>';
+      if(experimental){
+        const m=observation.metrics;
+        return `<aside class="satellite-panel" aria-label="Sentinel-2 vegetation observations"><div><div class="eyebrow">🛰️ Sentinel-2 · Satellite pilot</div><h4>Measured vegetation change <span class="sat-pill">Experimental</span></h4><p>Actual satellite reflectance measurements for this location, compared with a summer reference. <strong>This does not verify autumn leaf colors.</strong></p><div class="sat-metrics"><div><small>Latest clear scene</small><strong>${fmt(observation.latest_date)}</strong></div><div><small>Summer reference</small><strong>${fmt(observation.baseline_date)}</strong></div><div><small>NDVI difference</small><strong>${formatDelta(m.ndvi_difference)}</strong></div><div><small>Red/green difference</small><strong>${formatDelta(m.red_green_ratio_difference)}</strong></div></div><p class="sat-foot">${Number(m.sampled_pixels)} comparable 20m pixels. NDVI is a vegetation index; changes can reflect species, shadows, weather or stress—not just autumn color. No foliage stage has been verified.</p></div>${sourceLink}</aside>`;
+      }
+      if(observation?.status==='unavailable'){
+        const reason=escapeHtml(observation.reason||'No suitable clear imagery is available.');
+        return `<aside class="satellite-panel" aria-label="Sentinel-2 vegetation observations"><div><div class="eyebrow">🛰️ Sentinel-2 · Satellite pilot</div><h4>No usable satellite comparison yet</h4><p>${reason}. The scheduled analysis will retry. Foliage stages above remain weather-informed estimates, not satellite-verified colors.</p></div>${sourceLink}</aside>`;
+      }
+      const isPilot=p.id==='sever'||p.id==='faias';
+      return `<aside class="satellite-panel" aria-label="Sentinel-2 vegetation observations"><div><div class="eyebrow">🛰️ Sentinel-2 · Satellite pilot</div><h4>${isPilot?'Satellite analysis pending':'Outside the satellite pilot'}</h4><p>${isPilot?'This destination is included in the two-forest Sentinel-2 experiment. Weather-based foliage estimates remain separate from measured vegetation changes.':'The first satellite experiment covers Parque da Cabreia and Bosque das Faias. This location currently has only weather-informed foliage estimates.'}</p></div>${sourceLink}</aside>`;
     }
     async function loadSatelliteObservations(){
-      try{
-        const r=await fetch('./data/satellite-observations.json',{cache:'no-store'});
-        if(!r.ok)throw Error('No satellite feed');
-        const data=await r.json();
-        if(data.schema_version!==1 || typeof data.destinations!=='object'||!data.destinations)return;
-        state.satellite=data.destinations;
-        renderDetail();
-      }catch(e){ /* Empty is expected until a real processing job has been set up. */ }
+      // The scheduled GitHub Actions data commit does not trigger a Pages rebuild.
+      // Fetch latest raw file directly from the repository, falling back to last deployed data.
+      const urls=['https://raw.githubusercontent.com/bleonard17/folha/main/data/satellite-observations.json?fresh='+Math.floor(Date.now()/300000),'./data/satellite-observations.json'];
+      for(const url of urls){
+        try{
+          const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),7500);
+          let response;try{response=await fetch(url,{cache:'no-store',signal:ctl.signal})}finally{clearTimeout(timer)}
+          if(!response.ok)continue;
+          const data=await response.json();
+          if(data.schema_version!==1 || !data.destinations || typeof data.destinations!=='object')continue;
+          state.satellite=data.destinations;renderDetail();return;
+        }catch(e){ /* Try fallback; never synthesize observations. */ }
+      }
     }
     function renderDetail(){const p=PLACES.find(x=>x.id===state.selected)||PLACES[0];const peak=forecastPeak(p),n=progress(p,state.date),stage=stageInfo(n),w=weatherDay(p,state.date),forecastAvail=state.loaded&&!!w;const seven=Array.from({length:7},(_,i)=>dateAdd(state.date,i));const periodWeather=seven.map(x=>weatherDay(p,x));let relevantForecast=periodWeather.some(Boolean);const strips=seven.map((d,i)=>{const dW=periodWeather[i],sat=parseDate(d).getUTCDay();return `<div class="day ${i===0?'highlight':''}"><div class="weekday">${fmt(d,{weekday:'short'})}</div><div class="weather-icon" aria-label="Weather icon">${dayIcon(dW)}</div><div class="temps">${dW?`${Math.round(dW.max)}°/${Math.round(dW.min)}°`:'—'}</div><div class="precip">${dW?`${Math.round(dW.rain||0)} mm`:'No forecast'}</div></div>`}).join('');
       $('details').innerHTML=`<div class="detail-banner"><div class="eyebrow">Destination spotlight &nbsp; · &nbsp; ${p.region}</div><h2>${p.name}</h2><p>${p.description}</p></div><div class="detail-inner"><div class="detail-top"><div><h3>${stage.name} <span style="font:600 12px var(--sans);color:${stage.hex}">● Estimated</span></h3><p>${advice(p,state.date)}.</p></div><a class="btn btn-primary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${p.lat}%2C${p.lon}">Open in Maps ↗</a></div><div class="detail-grid"><div class="detail-stat"><span>Typical peak*</span><b>${fmt(peak)}</b><small>± roughly one week</small></div><div class="detail-stat"><span>Visit-date timing</span><b>${score(p,state.date)}/100</b><small>Heuristic score</small></div><div class="detail-stat"><span>Visit-day high</span><b>${w?Math.round(w.max)+'°C':'—'}</b><small>${w?'Forecast':'Not available yet'}</small></div><div class="detail-stat"><span>Visit-day rain</span><b>${w?Number(w.rain||0).toFixed(1)+' mm':'—'}</b><small>${w?'Forecast':'Not available yet'}</small></div></div><div class="forecast-title"><h3>Weather outlook</h3><span>${relevantForecast?'Open-Meteo daily forecast':'Outside available forecast / offline'}</span></div><div class="day-strip">${strips}</div><p class="peak-help"><strong>About this forest:</strong> ${p.trees}. The estimated peak window runs ${fmt(dateAdd(peak,-6),{day:'numeric',month:'long'})}–${fmt(dateAdd(peak,6),{day:'numeric',month:'long'})}. *Weather may shift the center of a typical window by a few days; it does not verify foliage on the ground.</p><div class="notice"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 11v6m0-10v1"/></svg><span>${!state.loaded?'Live weather could not be loaded. The foliage timing shown is based on the seasonal calendar only.':!forecastAvail?'No daily weather forecast is available for your selected visit date. Scores reflect foliage timing only.':'Weather forecasts are model predictions and may change. Color stage is still only an estimate; verify local photos, trail access and conditions before traveling.'}</span></div>${satellitePanel(p)}</div>`;
