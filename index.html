@@ -52,7 +52,19 @@
     .sat-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0;padding:10px;border-radius:10px;background:#e9f1e6;border:1px solid #dfe8db}
     .sat-metrics small{display:block;font-size:10px;color:#6b7c6c;margin-bottom:4px}
     .sat-metrics strong{font-size:13px;color:#2b4b32;font-weight:700}
-    .satellite-panel .sat-foot{font-size:11px;color:#65796a;margin-top:8px}
+    .satellite-panel .sat-foot{font-size:11px;color:#65796a;margin-top:12px}
+    .sat-insight{margin-top:14px;padding:16px 17px;border:1px solid #dce7d6;border-radius:13px;background:#e9f1e5}
+    .sat-insight-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6b876e;font-weight:800;margin-bottom:7px}
+    .sat-insight>strong{display:block;color:#2e5137;font:600 18px/1.35 var(--serif)}
+    .sat-insight p{margin:8px 0 0;line-height:1.65;font-size:12px}
+    .sat-insight p b{font-weight:750;color:#355341}
+    .sat-insight .sat-compare{color:#758977;font-size:11px;margin-top:9px}
+    .sat-insight .sat-stale{color:#986733;font-weight:700}
+    .sat-advanced{margin-top:12px;padding:0 4px}
+    .sat-advanced summary{cursor:pointer;color:#345f40;font-size:12px;font-weight:750;padding:8px 0}
+    .sat-advanced summary:hover{text-decoration:underline}
+    .sat-advanced .sat-metrics{margin:8px 0}
+    .sat-advanced .sat-foot{margin-bottom:8px}
     @media(max-width:600px){.satellite-panel{grid-template-columns:1fr}.map-view-switch{top:9px;left:9px}.map-view-switch button{padding:8px 10px}}
   </style>
 </head>
@@ -134,23 +146,51 @@
 
     function satellitePanel(p){
       const observation=state.satellite[p.id];
+      const pt=window.folhaLanguage==='pt';
+      const t=(en,portuguese)=>pt?portuguese:en;
       const experimental=observation?.status==='experimental' && observation.validated===false
         && observation.metrics && /^\d{4}-\d{2}-\d{2}$/.test(observation.latest_date||'')
+        && /^\d{4}-\d{2}-\d{2}$/.test(observation.baseline_date||'')
         && Number.isFinite(observation.metrics.ndvi_difference)
         && Number.isFinite(observation.metrics.red_green_ratio_difference);
       const formatDelta=v=>(v>0?'+':'')+Number(v).toFixed(3);
       const escapeHtml=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-      const sourceLink='<a href="https://browser.dataspace.copernicus.eu/" target="_blank" rel="noopener noreferrer">Explore imagery ↗</a>';
+      const sourceLink='<a href="https://browser.dataspace.copernicus.eu/" target="_blank" rel="noopener noreferrer">'+t('Explore imagery ↗','Explorar imagens ↗')+'</a>';
       if(experimental){
         const m=observation.metrics;
-        return `<aside class="satellite-panel" aria-label="Sentinel-2 vegetation observations"><div><div class="eyebrow">🛰️ Sentinel-2 · Satellite pilot</div><h4>Measured vegetation change <span class="sat-pill">Experimental</span></h4><p>Actual satellite reflectance measurements for this location, compared with a summer reference. <strong>This does not verify autumn leaf colors.</strong></p><div class="sat-metrics"><div><small>Latest clear scene</small><strong>${fmt(observation.latest_date)}</strong></div><div><small>Summer reference</small><strong>${fmt(observation.baseline_date)}</strong></div><div><small>NDVI difference</small><strong>${formatDelta(m.ndvi_difference)}</strong></div><div><small>Red/green difference</small><strong>${formatDelta(m.red_green_ratio_difference)}</strong></div></div><p class="sat-foot">${Number(m.sampled_pixels)} comparable 20m pixels. NDVI is a vegetation index; changes can reflect species, shadows, weather or stress—not just autumn color. No foliage stage has been verified.</p></div>${sourceLink}</aside>`;
+        // These thresholds produce a plain-language comparison ONLY, not an autumn-stage classification.
+        const smallShift=Math.abs(m.ndvi_difference)<0.05 && Math.abs(m.red_green_ratio_difference)<0.05;
+        const headline=smallShift
+          ?t('Satellite vegetation readings are close to summer levels','Os indicadores da vegetação estão próximos dos valores do verão')
+          :t('Satellite vegetation readings have shifted since summer','Os indicadores da vegetação mudaram desde o verão');
+        const explanation=smallShift
+          ?t('The two satellite indicators show only small differences from the late-summer image.','Os dois indicadores de satélite apresentam apenas pequenas diferenças face à imagem do final do verão.')
+          :t('The satellite detected changes in vegetation signals since the summer image, but their cause is uncertain.','O satélite detetou alterações nos indicadores da vegetação desde o verão, mas a causa é incerta.');
+        const caution=t('This does NOT confirm whether the leaves have turned yellow, orange or red.','Isto NÃO confirma se as folhas já ficaram amarelas, laranjas ou vermelhas.');
+        const older=dayDiff(today,observation.latest_date)>14;
+        const staleness=older?'<p class="sat-stale">'+t('This satellite image is over two weeks old and may not reflect conditions today.','Esta imagem de satélite tem mais de duas semanas e pode não refletir as condições atuais.')+'</p>':'';
+        const comparison=t('Comparing','Comparação:')+' '+fmt(observation.latest_date)+' '+t('with','com')+' '+fmt(observation.baseline_date);
+        return '<aside class="satellite-panel" aria-label="'+t('Sentinel-2 vegetation observations','Observações de vegetação Sentinel-2')+'">'
+          +'<div><div class="eyebrow">🛰️ Sentinel-2 · '+t('Satellite pilot','Projeto-piloto por satélite')+'</div>'
+          +'<h4>'+t('What does the satellite tell us?','O que nos diz o satélite?')+' <span class="sat-pill">'+t('Experimental','Experimental')+'</span></h4>'
+          +'<div class="sat-insight"><div class="sat-insight-label">'+t('Current reading','Leitura atual')+'</div>'
+          +'<strong>'+headline+'</strong><p>'+explanation+' <b>'+caution+'</b></p>'
+          +'<p class="sat-compare">'+comparison+'</p>'+staleness+'</div>'
+          +'<details class="sat-advanced"><summary>'+t('View satellite data','Ver dados de satélite')+'</summary>'
+          +'<div class="sat-metrics"><div><small>'+t('Latest clear image','Imagem recente sem nuvens')+'</small><strong>'+fmt(observation.latest_date)+'</strong></div>'
+          +'<div><small>'+t('Summer reference','Referência do verão')+'</small><strong>'+fmt(observation.baseline_date)+'</strong></div>'
+          +'<div><small>'+t('NDVI difference','Diferença de NDVI')+'</small><strong>'+formatDelta(m.ndvi_difference)+'</strong></div>'
+          +'<div><small>'+t('Red/green reflectance difference','Diferença de refletância vermelho/verde')+'</small><strong>'+formatDelta(m.red_green_ratio_difference)+'</strong></div></div>'
+          +'<p class="sat-foot">'+Number(m.sampled_pixels)+' '+t('comparable pixels at 20 m resolution. NDVI measures vegetation greenness, while the red/green ratio compares reflected light. Both can change for reasons other than leaf color. The “small shift” label is an experimental rule of thumb, not a validated foliage prediction.','píxeis comparáveis com resolução de 20 m. O NDVI mede o vigor/verdor da vegetação e a razão vermelho/verde compara a luz refletida. Ambos podem variar por outros motivos além da cor das folhas. A indicação de “pequena alteração” é uma regra aproximada experimental, não uma previsão de folhagem validada.')+'</p></details>'
+          +'<p class="sat-foot">'+t('For a visit, also check recent local photos, the weather forecast and trail conditions.','Para planear uma visita, consulte também fotografias locais recentes, a previsão meteorológica e as condições dos trilhos.')+'</p>'
+          +'</div>'+sourceLink+'</aside>';
       }
       if(observation?.status==='unavailable'){
         const reason=escapeHtml(observation.reason||'No suitable clear imagery is available.');
-        return `<aside class="satellite-panel" aria-label="Sentinel-2 vegetation observations"><div><div class="eyebrow">🛰️ Sentinel-2 · Satellite pilot</div><h4>No usable satellite comparison yet</h4><p>${reason}. The scheduled analysis will retry. Foliage stages above remain weather-informed estimates, not satellite-verified colors.</p></div>${sourceLink}</aside>`;
+        return '<aside class="satellite-panel" aria-label="Sentinel-2"><div><div class="eyebrow">🛰️ Sentinel-2 · '+t('Satellite pilot','Projeto-piloto por satélite')+'</div><h4>'+t('No usable satellite comparison yet','Ainda sem comparação de satélite utilizável')+'</h4><p>'+reason+'. '+t('The scheduled analysis will retry. Foliage predictions are still weather-based estimates.','A análise agendada voltará a tentar. As previsões de folhagem continuam a ser estimativas meteorológicas.')+'</p></div>'+sourceLink+'</aside>';
       }
       const isPilot=p.id==='sever'||p.id==='faias';
-      return `<aside class="satellite-panel" aria-label="Sentinel-2 vegetation observations"><div><div class="eyebrow">🛰️ Sentinel-2 · Satellite pilot</div><h4>${isPilot?'Satellite analysis pending':'Outside the satellite pilot'}</h4><p>${isPilot?'This destination is included in the two-forest Sentinel-2 experiment. Weather-based foliage estimates remain separate from measured vegetation changes.':'The first satellite experiment covers Parque da Cabreia and Bosque das Faias. This location currently has only weather-informed foliage estimates.'}</p></div>${sourceLink}</aside>`;
+      return '<aside class="satellite-panel" aria-label="Sentinel-2"><div><div class="eyebrow">🛰️ Sentinel-2 · '+t('Satellite pilot','Projeto-piloto por satélite')+'</div><h4>'+ (isPilot?t('Satellite analysis pending','Análise de satélite pendente'):t('Outside the satellite pilot','Fora do projeto-piloto por satélite'))+'</h4><p>'+(isPilot?t('This forest is included in the two-location experiment. Weather-based foliage predictions remain separate from measured vegetation changes.','Esta floresta integra a experiência com dois locais. As previsões de folhagem baseadas na meteorologia são independentes das alterações da vegetação medidas por satélite.'):t('The first satellite experiment covers Parque da Cabreia and Bosque das Faias. This place has weather-based foliage estimates only.','A primeira experiência por satélite abrange o Parque da Cabreia e o Bosque das Faias. Este local tem apenas estimativas de folhagem baseadas na meteorologia.'))+'</p></div>'+sourceLink+'</aside>';
     }
     async function loadSatelliteObservations(){
       // The scheduled GitHub Actions data commit does not trigger a Pages rebuild.
