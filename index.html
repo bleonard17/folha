@@ -158,6 +158,19 @@
     const MAP_STYLES={liberty:'https://tiles.openfreemap.org/styles/liberty',positron:'https://tiles.openfreemap.org/styles/positron'};
     // The interactive, bundled SVG map is the baseline. Network tiles only enhance it.
     let mapAttempt=0;
+    let lastMapError='';
+    function mapFailureLabel(error){
+      const raw=String(error?.message||error||'Unknown error').trim();
+      lastMapError=raw;
+      if(/webgl/i.test(raw))return 'WebGL is unavailable or disabled';
+      if(/map library/i.test(raw))return 'Map JavaScript CDN failed: '+raw;
+      if(/timed out/i.test(raw))return 'Map timed out: '+raw;
+      if(/403|forbidden/i.test(raw))return 'Map service returned HTTP 403';
+      if(/404|not found/i.test(raw))return 'Map resource returned HTTP 404';
+      if(/cors|cross.origin/i.test(raw))return 'Cross-origin (CORS) request blocked';
+      if(/failed to fetch|network|load failed/i.test(raw))return 'Map request blocked or failed: '+raw.slice(0,85);
+      return raw.slice(0,120);
+    }
     function setMapFeedback(message){
       $('mapFeedback').textContent=message;
       $('mapFeedback').style.display='block';
@@ -252,6 +265,7 @@
       $('mapFallback').style.display='grid';
       $('map').style.visibility='hidden';
       $('mapRetry').hidden=true;
+      lastMapError='';
       setMapFeedback('Interactive outline ready · loading detailed map…');
       try{
         await loadMapLibrary();
@@ -261,7 +275,7 @@
           let done=false;
           let map;
           const settle=(err)=>{if(done)return;done=true;clearTimeout(timer);if(err){reject(err)}else resolve()};
-          const timer=setTimeout(()=>settle(new Error('Detailed tiles timed out')),10000);
+          const timer=setTimeout(()=>settle(new Error(lastMapError ? 'Detailed tiles timed out; last map error: '+lastMapError : 'Detailed tiles timed out after 10 seconds')),10000);
           try{
             map=new maplibregl.Map({container:'map',style:MAP_STYLES[state.mapStyle],center:[-8.2,39.7],zoom:6.25,minZoom:5.7,maxZoom:15,scrollZoom:false,dragRotate:false,pitchWithRotate:false,attributionControl:true,cooperativeGestures:true});
             state.map=map;
@@ -275,8 +289,11 @@
               settle();
             });
             map.on('error',e=>{
-              const message=String(e?.error?.message||'');
-              if(!done && /failed|fetch|network|403|404|timeout|style|cors/i.test(message))settle(new Error(message));
+              const message=String(e?.error?.message||'').trim();
+              if(!done && message){
+                lastMapError=message;
+                if(/failed|fetch|network|403|404|timeout|style|cors|worker/i.test(message))settle(new Error(message));
+              }
             });
           }catch(e){settle(e)}
         });
@@ -290,8 +307,10 @@
         window.setTimeout(()=>{if(state.mapReady)$('mapFeedback').style.display='none'},2500);
       }catch(e){
         if(attempt!==mapAttempt)return;
-        showFallbackMap('Interactive outline · detailed map unavailable');
-        console.warn('Detailed map unavailable, using built-in map:',e.message);
+        const detail=mapFailureLabel(e);
+        showFallbackMap('Detailed map unavailable · '+detail+' · Try Retry');
+        $('mapFeedback').title='Full map diagnostic: '+String(e?.message||e);
+        console.warn('Detailed map unavailable, using built-in map:',e);
       }
     }
     async function loadWeather(){const u=new URL('https://api.open-meteo.com/v1/forecast');u.searchParams.set('latitude',PLACES.map(p=>p.lat).join(','));u.searchParams.set('longitude',PLACES.map(p=>p.lon).join(','));u.searchParams.set('daily','temperature_2m_max,temperature_2m_min,temperature_2m_mean,precipitation_sum,wind_gusts_10m_max,weather_code');u.searchParams.set('past_days','45');u.searchParams.set('forecast_days','14');u.searchParams.set('timezone','Europe/Lisbon');let data;let cacheUsed=false;try{const cache=JSON.parse(localStorage.getItem('folha-weather-v1')||'null');if(cache&&cache.saved&&Date.now()-cache.saved<60*60*1000&&Array.isArray(cache.payload)){data=cache.payload;cacheUsed=true}}catch(e){}
