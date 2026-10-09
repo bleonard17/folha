@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="folha. — Portugal's fall colors. Find your fall colors with estimated foliage timing, weather, and a map of 19 destinations.">
+<defs>
+  <linearGradient id="cream" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FCFAF3"/><stop offset="1" stop-color="#F3F1E7"/></linearGradient>
+  <linearGradient id="sky" x1="0" x2="0.9" y1="0" y2="1"><stop offset="0" stop-color="#E9BD8B"/><stop offset="0.55" stop-color="#EFCB9D"/><stop offset="1" stop-color="#F3DABC"/></linearGradient>
+  <linearGradient id="terrain" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#778F70"/><stop offset="1" stop-color="#3F634E"/></linearGradient>
+  <clipPath id="scene"><rect x="706" y="34" width="460" height="562" rx="30"/></clipPath>
+  <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="18"/></filter>
+  <g id="leaf"><path d="M-4 0 C-40 -30 -36 -72 -11 -90 C32 -78 41 -38 12 -4 C7 -2 1 0 -4 0Z"/><path d="M0 -2 C-2 -27 -3 -50 -9 -75" stroke="#614D32" stroke-opacity="0.30" stroke-width="2" stroke-linecap="round" fill="none"/></g>
+</defs>
+<rect width="1200" height="630" fill="url(#cream)"/>
+<rect x="24" y="24" width="1152" height="582" rx="29" fill="none" stroke="#E5E7DA" stroke-width="2"/>
+<!-- brand emblem -->
+<rect x="73" y="67" width="55" height="55" rx="17" fill="#2B4B39"/>
+<path d="M114 80 C94 83 83 94 88 108 C103 110 114 94 114 80Z" fill="#E7BB70"/>
+<path d="M88 109 C93 98 102 90 109 86" fill="none" stroke="#35523A" stroke-width="2.7" stroke-linecap="round"/>
+<text x="147" y="103" font-family="DejaVu Sans, sans-serif" font-size="17" letter-spacing="3.8" font-weight="700" fill="#4E6853">PORTUGAL'S FALL FIELD GUIDE</text>
+<line x1="79" y1="171" x2="637" y2="171" stroke="#D6DFD3" stroke-width="2"/>
+<text x="73" y="307" font-family="DejaVu Serif, Georgia, serif" font-size="112" font-weight="700" letter-spacing="-5" fill="#284A36">folha<tspan fill="#B45F3C">.</tspan></text>
+<text x="79" y="389" font-family="DejaVu Serif, Georgia, serif" font-size="46" fill="#314F3B">Find your <tspan fill="#B45F3C">fall colors.</tspan></text>
+<text x="79" y="441" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#677669">Explore Portugal's seasonal foliage,</text>
+<text x="79" y="472" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#677669">weather and forest destinations.</text>
+<rect x="79" y="528" width="250" height="51" rx="25.5" fill="#2B513B"/>
+<text x="204" y="560" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#FFFEF6">folha.trilho.dev</text>
+<!-- landscape vignette -->
+<g clip-path="url(#scene)">
+  <rect x="706" y="34" width="460" height="562" fill="url(#sky)"/>
+  <circle cx="1016" cy="173" r="115" fill="#FAE4BD" opacity="0.79"/>
+  <path d="M701 380 C781 311 839 316 905 254 C951 212 1009 285 1063 294 C1125 306 1144 278 1187 278 L1187 640 L701 640Z" fill="#B7AD84" opacity="0.5"/>
+  <path d="M685 438 C758 348 794 391 854 349 C917 305 957 348 1009 325 C1064 297 1122 344 1187 351 L1187 640 L685 640Z" fill="#8C9D7A"/>
+  <path d="M686 492 C758 447 801 420 879 430 C934 437 993 369 1080 394 C1122 407 1155 404 1192 407 L1192 640 L686 640Z" fill="url(#terrain)"/>
+  <path d="M712 554 C790 527 831 496 899 519 C961 538 1051 493 1177 464 L1177 640 L712 640Z" fill="#315640" opacity="0.8"/>
+  <!-- winding pathway -->
+  <path d="M914 607 C903 557 969 534 1001 505 C1021 488 1031 474 1026 466" fill="none" stroke="#E7D0A7" stroke-width="45" opacity="0.72"/>
+  <path d="M914 607 C903 557 969 534 1001 505 C1021 488 1031 474 1026 466" fill="none" stroke="#EFDDBC" stroke-width="26" opacity="0.95"/>
+  <!-- distant trees -->
+  <g fill="#526C4A"><path d="M754 470 l20 -85 21 85Z"/><path d="M783 479 l19 -82 24 82Z"/><path d="M1115 451 l20 -80 22 80Z"/></g>
+  <!-- right tall tree -->
+  <path d="M1094 584 C1090 500 1093 422 1096 349" fill="none" stroke="#5A5142" stroke-width="15" stroke-linecap="round"/>
+  <path d="M1094 465 L1039 403 M1096 427 L1150 361 M1096 398 L1055 343" fill="none" stroke="#5A5142" stroke-width="8" stroke-linecap="round"/>
+  <g fill="#CB7D41"><circle cx="1051" cy="359" r="47"/><circle cx="1119" cy="330" r="59"/><circle cx="1142" cy="380" r="42"/><circle cx="1092" cy="396" r="59"/></g>
+  <g fill="#E7B65F"><circle cx="1059" cy="343" r="42"/><circle cx="1125" cy="302" r="38"/><circle cx="1105" cy="373" r="41"/></g>
+  <g fill="#B95D39" opacity="0.92"><circle cx="1150" cy="360" r="31"/><circle cx="1064" cy="383" r="33"/></g>
+  <g fill="#F0CE7A" opacity="0.8"><circle cx="1093" cy="318" r="36"/><circle cx="1143" cy="318" r="20"/></g>
+  <!-- left autumn tree -->
+  <path d="M793 581 L804 372" fill="none" stroke="#5A5142" stroke-width="12" stroke-linecap="round"/>
+  <path d="M800 470 L751 409 M802 451 L850 397" fill="none" stroke="#5A5142" stroke-width="7" stroke-linecap="round"/>
+  <g fill="#B66341"><circle cx="757" cy="386" r="42"/><circle cx="812" cy="351" r="60"/><circle cx="856" cy="388" r="45"/></g>
+  <g fill="#E6AB57"><circle cx="780" cy="361" r="48"/><circle cx="835" cy="336" r="44"/><circle cx="815" cy="409" r="52"/></g>
+  <g fill="#F3CC7A" opacity="0.86"><circle cx="790" cy="331" r="32"/><circle cx="851" cy="361" r="23"/></g>
+  <g fill="#A4583D" opacity="0.9"><circle cx="749" cy="413" r="29"/><circle cx="830" cy="420" r="22"/></g>
+  <!-- scattered leaves -->
+  <g fill="#D6A35A" opacity="0.88"><use xlink:href="#leaf" transform="translate(936 357) rotate(22) scale(0.19)"/><use xlink:href="#leaf" transform="translate(969 450) rotate(-52) scale(0.14)"/><use xlink:href="#leaf" transform="translate(1156 493) rotate(40) scale(0.2)"/><use xlink:href="#leaf" transform="translate(868 506) rotate(66) scale(0.13)"/></g>
+</g>
+<!-- bottom right vignette tag -->
+<rect x="945" y="537" width="192" height="39" rx="19.5" fill="#FCFAF2" opacity="0.95"/>
+<circle cx="963" cy="556" r="5" fill="#C17B43"/>
+<text x="982" y="562" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="700" fill="#35513C">19 places to explore</text>
+</svg>
