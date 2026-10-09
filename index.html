@@ -270,7 +270,8 @@
       try{
         await loadMapLibrary();
         if(attempt!==mapAttempt)return;
-        if(!maplibregl.supported())throw Error('WebGL unavailable');
+        // MapLibre GL JS v5 does not expose maplibregl.supported().
+        // Let the Map constructor report WebGL or initialization failures to the fallback handler.
         await new Promise((resolve,reject)=>{
           let done=false;
           let map;
