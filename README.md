@@ -47,3 +47,13 @@ Ten additional destinations have been curated mainly north of Lisbon: Vinhais ch
 **Important:** These new locations have provisional seasonal peak windows. The dates are planning heuristics, **not verified local foliage observations or scientific forecasts**. The marker coordinates identify representative areas, not necessarily trailheads or entrances. This is not an exhaustive inventory of every Portuguese protected area; mixed evergreen habitats may show only patchy fall color.
 
 Tourism and nature references: [Visit Portugal — Alvão](https://www.visitportugal.com/pt-pt/content/parque-natural-do-alvao), [Paiva Walkways](https://www.visitportugal.com/pt-pt/content/passadicos-do-paiva), [Parque da Pena](https://www.visitportugal.com/pt-pt/content/parque-da-pena), [Mata dos Sete Montes](https://www.visitportugal.com/en/NR/exeres/E770E38B-1249-47FD-A093-542D13E3B1D2), [Serra do Caramulo](https://www.visitportugal.com/pt-pt/destinos/centro-de-portugal/73760), and [Vinhais chestnut season](https://www.visitportugal.com/en/node/522161).
+
+## Public site improvements — October 2026
+
+- **EN / PT toggle** in the site header: English (US) and Portuguese (Portugal). The preferred language is saved in browser local storage; no account is required.
+- **Zoom-responsive map marker clustering** on the detailed MapLibre map. Cluster circles show nearby destination counts; select a cluster to zoom in. The always-available SVG fallback continues to show every destination independently.
+- **Destination-type filters** distinguish forests and gardens from broader nature areas; this is about the type of place, **not whether autumn colors have been verified**.
+- **Privacy and transparency:** a bilingual [privacy, sources and estimates notice](privacy.html) explains browser storage, external providers, map attribution and the experimental nature of the foliage scores. No optional analytics or ad-tracking has been added. A cookie-consent banner may become necessary if those services are added later.
+- Project-facing UI is branded as **folha.** without a personal byline. The public GitHub account hosting the source remains discoverable.
+
+Data caveat: nineteen destinations are **curated locations, not comprehensive Portugal-wide coverage**, and scores/peak dates remain experimental weather-informed approximations rather than observations of actual leaf colors.
