@@ -1,6 +1,69 @@
 {
   "schema_version": 1,
-  "generated_at": null,
-  "methodology": "No satellite processing has been deployed yet. Destinations remain unverified.",
-  "destinations": {}
+  "generated_at": "2026-10-09T11:28:08+00:00",
+  "source": "Element 84 Earth Search Sentinel-2 C1 L2A",
+  "source_url": "https://earth-search.aws.element84.com/v1",
+  "method": "Small-area cloud-screened spectral index comparison against summer reference; NOT a verified autumn leaf-color observation",
+  "destinations": {
+    "sever": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Sever do Vouga — Parque da Cabreia",
+      "site_center": {
+        "lat": 40.752806,
+        "lon": -8.390222
+      },
+      "metrics": {
+        "sampled_pixels": 236,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.836,
+        "latest_ndvi": 0.872,
+        "ndvi_difference": 0.036,
+        "baseline_red_green_ratio": 0.739,
+        "latest_red_green_ratio": 0.736,
+        "red_green_ratio_difference": -0.003
+      },
+      "latest_date": "2026-10-08",
+      "baseline_date": "2026-08-29",
+      "latest_scene": "S2C_T29TNF_20261008T113446_L2A",
+      "baseline_scene": "S2C_T29TNF_20260829T113659_L2A",
+      "latest_tile_cloud_cover_pct": 0.020219,
+      "baseline_tile_cloud_cover_pct": 18.672182,
+      "latest_local_vegetation_pixels": 240,
+      "baseline_local_vegetation_pixels": 236,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "faias": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Bosque das Faias",
+      "site_center": {
+        "lat": 40.413475,
+        "lon": -7.511206
+      },
+      "metrics": {
+        "sampled_pixels": 248,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.898,
+        "latest_ndvi": 0.892,
+        "ndvi_difference": -0.006,
+        "baseline_red_green_ratio": 0.537,
+        "latest_red_green_ratio": 0.526,
+        "red_green_ratio_difference": -0.011
+      },
+      "latest_date": "2026-10-07",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2A_T29TPE_20261007T112125_L2A",
+      "baseline_scene": "S2B_T29TPE_20260831T112515_L2A",
+      "latest_tile_cloud_cover_pct": 47.905037,
+      "baseline_tile_cloud_cover_pct": 6.305663,
+      "latest_local_vegetation_pixels": 248,
+      "baseline_local_vegetation_pixels": 248,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    }
+  }
 }
