@@ -15,6 +15,8 @@
   "Near peak on visit date": "Perto do pico na data escolhida",
   "Predicted by the seasonal model": "Estimado pelo modelo sazonal",
   "Top pick": "Melhor sugestão",
+  "View details ↗": "Ver detalhes ↗",
+  "View details for ": "Ver detalhes de ",
   "For your selected visit date": "Para a data escolhida",
   "Your autumn field guide": "O seu guia de outono",
   "Explore the color map": "Explore o mapa das cores",
