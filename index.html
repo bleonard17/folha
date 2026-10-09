@@ -40,14 +40,14 @@
     .control-date{position:relative;cursor:pointer;transition:border-color .16s ease,box-shadow .16s ease;background:#fffefa}
     .control-date:hover{border-color:#bdcbb6;box-shadow:0 2px 11px #23372b0b}
     .control-date:focus-within{outline:2px solid #bd904e;outline-offset:2px}
-    .date-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:32px;color:var(--ink);font-size:13px;font-weight:700;line-height:1.3}
+    .date-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:32px;padding-right:32px;color:var(--ink);font-size:13px;font-weight:700;line-height:1.3}
     .date-trigger span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .date-calendar-icon{display:block;flex:0 0 30px;width:30px;height:30px;align-self:center;color:#3e6447;transition:transform .15s ease}
-    .control-date:hover .date-calendar-icon{transform:translateY(-1px)}
+    .date-calendar-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:block;width:22.5px;height:22.5px;color:#3e6447;pointer-events:none}
+    .control-date:hover .date-calendar-icon{color:#294d36}
     .control-date #visitDate{position:absolute;inset:0;z-index:2;display:block;width:100%;height:100%;padding:0;margin:0;opacity:0;cursor:pointer;font-size:16px;appearance:none;-webkit-appearance:none}
     .control-date #visitDate::-webkit-calendar-picker-indicator{opacity:0;cursor:pointer}
     .control-date #visitDate::-webkit-datetime-edit{opacity:0}
-    @media(max-width:390px){.date-trigger{font-size:12px}.date-calendar-icon{width:27px;height:27px;flex-basis:27px}}
+    @media(max-width:390px){.date-trigger{font-size:12px;padding-right:28px}.date-calendar-icon{width:20.25px;height:20.25px;right:10px}}
     .cards-window::before,.cards-window::after{content:"";position:absolute;left:0;right:6px;height:35px;z-index:3;pointer-events:none;opacity:0;transition:opacity .18s ease}
     .cards-window::before{top:0;background:linear-gradient(to bottom,#f8f6ef 0%,rgba(248,246,239,.72) 28%,rgba(248,246,239,0) 100%)}
     .cards-window::after{bottom:0;background:linear-gradient(to top,#f8f6ef 0%,rgba(248,246,239,.72) 28%,rgba(248,246,239,0) 100%)}
@@ -118,7 +118,7 @@
     <section class="overview" aria-label="Season overview"><div class="metric"><div class="metric-label">Places tracked</div><div class="metric-number" id="numPlaces">19</div><div class="metric-note">Curated autumn destinations</div></div><div class="metric"><div class="metric-label">Near peak on visit date</div><div class="metric-number" id="numPeak">—</div><div class="metric-note" id="peakNote">Predicted by the seasonal model</div></div><div class="metric"><div class="metric-label">Top pick</div><div class="metric-number" id="topPick" style="font-size:22px;margin-top:12px">—</div><div class="metric-note" id="topPickNote">For your selected visit date</div></div></section>
     <div class="section-heading"><div><div class="eyebrow">Your autumn field guide</div><h2>Explore the color map</h2><p>Choose a date to compare foliage timing across Portugal.</p></div><span class="tag">● &nbsp; Forecast + seasonal estimates</span></div>
     <section class="dashboard" aria-label="Foliage dashboard">
-      <div class="left-area"><div class="controls"><div class="control control-date" id="visitDateControl"><label for="visitDate">Plan for</label><div class="date-trigger" aria-hidden="true"><span id="visitDateText">Choose a date</span><svg class="date-calendar-icon" width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+      <div class="left-area"><div class="controls"><div class="control control-date" id="visitDateControl"><label for="visitDate">Plan for</label><div class="date-trigger" aria-hidden="true"><span id="visitDateText">Choose a date</span><svg class="date-calendar-icon" width="23" height="23" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
   <rect x="3.1" y="6.2" width="25.8" height="22.6" rx="3.3" stroke="currentColor" stroke-width="2.6"/>
   <path d="M3.6 13.1h24.8M10 3.4v5.7M22 3.4v5.7" stroke="currentColor" stroke-width="2.9" stroke-linecap="round"/>
   <g fill="currentColor">
