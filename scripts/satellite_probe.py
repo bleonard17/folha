@@ -22,10 +22,32 @@ import requests
 
 API = 'https://earth-search.aws.element84.com/v1/search'
 COLLECTION = 'sentinel-2-c1-l2a'
+# All 19 curated map destinations, with coordinates matching index.html.
+# Each observation is a 400 m SAMPLE around a representative point, not a
+# forest-wide, park-wide, or region-wide measurement.
 SITES = {
-    'sever': {'name': 'Sever do Vouga — Parque da Cabreia', 'lat': 40.752806, 'lon': -8.390222},
-    'faias': {'name': 'Bosque das Faias', 'lat': 40.413475, 'lon': -7.511206},
+    'sever': {'name': 'Sever do Vouga — Parque da Cabreia', 'region': 'Centro', 'lat': 40.752806, 'lon': -8.390222},
+    'faias': {'name': 'Bosque das Faias', 'region': 'Centro', 'lat': 40.413475, 'lon': -7.511206},
+    'geres': {'name': 'Mata da Albergaria', 'region': 'Norte', 'lat': 41.785, 'lon': -8.145},
+    'montesinho': {'name': 'Montesinho', 'region': 'Norte', 'lat': 41.936, 'lon': -6.763},
+    'margaraca': {'name': 'Mata da Margaraça', 'region': 'Centro', 'lat': 40.213, 'lon': -7.923},
+    'bussaco': {'name': 'Mata do Bussaco', 'region': 'Centro', 'lat': 40.379, 'lon': -8.365},
+    'lousa': {'name': 'Serra da Lousã', 'region': 'Centro', 'lat': 40.092, 'lon': -8.235},
+    'mamede': {'name': 'Serra de São Mamede', 'region': 'Alentejo', 'lat': 39.39, 'lon': -7.377},
+    'vinhais': {'name': 'Castanheiros de Vinhais', 'region': 'Norte', 'lat': 41.836, 'lon': -7.005},
+    'bertiandos': {'name': 'Lagoas de Bertiandos', 'region': 'Norte', 'lat': 41.788, 'lon': -8.628},
+    'sistelo': {'name': 'Sistelo · Vale do Vez', 'region': 'Norte', 'lat': 41.983, 'lon': -8.375},
+    'alvao': {'name': 'Parque Natural do Alvão', 'region': 'Norte', 'lat': 41.383, 'lon': -7.874},
+    'paiva': {'name': 'Passadiços do Paiva', 'region': 'Norte', 'lat': 40.966, 'lon': -8.157},
+    'freita': {'name': 'Serra da Freita', 'region': 'Norte', 'lat': 40.86, 'lon': -8.279},
+    'caramulo': {'name': 'Serra do Caramulo', 'region': 'Centro', 'lat': 40.571, 'lon': -8.166},
+    'choupal': {'name': 'Mata Nacional do Choupal', 'region': 'Centro', 'lat': 40.222, 'lon': -8.44},
+    'setemontes': {'name': 'Mata dos Sete Montes', 'region': 'Centro', 'lat': 39.603, 'lon': -8.418},
+    'pena': {'name': 'Parque da Pena', 'region': 'Lisboa', 'lat': 38.787, 'lon': -9.389},
+    'monserrate': {'name': 'Parque de Monserrate', 'region': 'Lisboa', 'lat': 38.793, 'lon': -9.419},
 }
+REGIONS = ('Norte', 'Centro', 'Lisboa', 'Alentejo')
+
 SIZE = 20  # 20 m UTM sampling grid; 400x400 m footprint
 METERS = 20
 MIN_PIXELS = 30
@@ -134,7 +156,9 @@ def scan_site(session,site,today):
     summer_start,summer_end=summer_dates(today)
     result={'status':'unavailable','validated':False,'stage':None,
             'model':'sentinel2_summer_comparison_experimental_v1',
-            'site_name':site['name'],'site_center':{'lat':site['lat'],'lon':site['lon']}}
+            'site_name':site['name'],'region':site['region'],
+            'sampling_scope':'representative_point_400m',
+            'site_center':{'lat':site['lat'],'lon':site['lon']}}
     # Require autumn recent image after August. Early September difference may
     # be near zero; that's a valid negative result, not evidence of late foliage.
     recent_start=max(date(today.year,9,1),today-timedelta(days=70))
@@ -172,27 +196,79 @@ def scan_site(session,site,today):
         return result
 
 
+def build_document(destinations, region=None):
+    return {'schema_version': 1,
+            'generated_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+            'source': 'Element 84 Earth Search Sentinel-2 C1 L2A',
+            'source_url': 'https://earth-search.aws.element84.com/v1',
+            'method': 'Cloud-screened 400 m sample around each representative map coordinate compared with summer; NOT verified autumn leaf color or region-wide vegetation',
+            'sampling_scope': 'representative_point_400m',
+            'coverage': '19 curated destinations across Norte, Centro, Lisboa and Alentejo',
+            'region': region,
+            'destinations': destinations}
+
+
+def merge_regional_outputs(directory):
+    """Fail closed when a regional artifact is missing, duplicated or invalid."""
+    directory = Path(directory)
+    combined = {}
+    found_regions = set()
+    for path in sorted(directory.glob('*.json')):
+        document = json.loads(path.read_text(encoding='utf8'))
+        if document.get('schema_version') != 1:
+            raise ValueError(f'{path}: unsupported schema')
+        region = document.get('region')
+        if region not in REGIONS or region in found_regions:
+            raise ValueError(f'{path}: invalid or duplicate region {region}')
+        found_regions.add(region)
+        expected = {key for key, site in SITES.items() if site['region'] == region}
+        entries = document.get('destinations')
+        if not isinstance(entries, dict) or set(entries) != expected:
+            raise ValueError(f'{path}: missing or unexpected sites for {region}')
+        for site_id, observation in entries.items():
+            if not isinstance(observation, dict) or observation.get('validated') is not False:
+                raise ValueError(f'{path}: {site_id} has invalid validation status')
+            if observation.get('stage') is not None:
+                raise ValueError(f'{path}: {site_id} claimed an unverified foliage stage')
+            if observation.get('status') not in ('experimental', 'unavailable'):
+                raise ValueError(f'{path}: {site_id} has unsupported status')
+            if observation.get('region') != region or observation.get('sampling_scope') != 'representative_point_400m':
+                raise ValueError(f'{path}: {site_id} has inconsistent region or sampling scope')
+            if observation.get('status') == 'experimental' and not isinstance(observation.get('metrics'), dict):
+                raise ValueError(f'{path}: {site_id} missing actual measurements')
+        combined.update(entries)
+    if found_regions != set(REGIONS) or set(combined) != set(SITES):
+        raise ValueError(f'Incomplete regional coverage: {sorted(found_regions)}')
+    return build_document({site_id: combined[site_id] for site_id in SITES})
+
+
 def main(argv=None):
-    parser=argparse.ArgumentParser()
-    parser.add_argument('--output',default='data/satellite-observations.json')
-    parser.add_argument('--today',default=None,help='ISO date override for tests')
-    args=parser.parse_args(argv)
-    today=date.fromisoformat(args.today) if args.today else datetime.now(timezone.utc).date()
-    result={'schema_version':1,'generated_at':datetime.now(timezone.utc).isoformat(timespec='seconds'),
-            'source':'Element 84 Earth Search Sentinel-2 C1 L2A',
-            'source_url':'https://earth-search.aws.element84.com/v1',
-            'method':'Small-area cloud-screened spectral index comparison against summer reference; NOT a verified autumn leaf-color observation',
-            'destinations':{}}
-    with requests.Session() as session:
-        for site_id, site in SITES.items():
-            print(f'Analyzing {site_id}...',flush=True)
-            result['destinations'][site_id]=scan_site(session,site,today)
-            print(site_id,result['destinations'][site_id]['status'],result['destinations'][site_id].get('reason'),flush=True)
-    out=Path(args.output)
-    out.parent.mkdir(parents=True,exist_ok=True)
-    out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
-    print(f'Wrote {out}',flush=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--output', default='data/satellite-observations.json')
+    parser.add_argument('--today', default=None, help='ISO date override for tests')
+    parser.add_argument('--region', choices=REGIONS, default=None,
+                        help='Analyze destinations in just this region')
+    parser.add_argument('--merge-dir', default=None,
+                        help='Merge previously computed regional JSON files without remote requests')
+    args = parser.parse_args(argv)
+    if args.merge_dir:
+        document = merge_regional_outputs(args.merge_dir)
+    else:
+        today = date.fromisoformat(args.today) if args.today else datetime.now(timezone.utc).date()
+        selected = {k: v for k, v in SITES.items() if args.region is None or v['region'] == args.region}
+        entries = {}
+        with requests.Session() as session:
+            for site_id, site in selected.items():
+                print(f'Analyzing {site_id} in {site["region"]}...', flush=True)
+                entries[site_id] = scan_site(session, site, today)
+                print(site_id, entries[site_id]['status'], entries[site_id].get('reason'), flush=True)
+        document = build_document(entries, region=args.region)
+    out = Path(args.output)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    print(f'Wrote {len(document["destinations"])} destination observations to {out}', flush=True)
     return 0
 
 
-if __name__=='__main__':sys.exit(main())
+if __name__ == '__main__':
+    sys.exit(main())
