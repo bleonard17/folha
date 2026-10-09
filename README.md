@@ -57,3 +57,16 @@ Tourism and nature references: [Visit Portugal — Alvão](https://www.visitport
 - Project-facing UI is branded as **folha.** without a personal byline. The public GitHub account hosting the source remains discoverable.
 
 Data caveat: nineteen destinations are **curated locations, not comprehensive Portugal-wide coverage**, and scores/peak dates remain experimental weather-informed approximations rather than observations of actual leaf colors.
+
+## Live Sentinel-2 spectral pilot (October 2026)
+
+An automated **experimental** analysis now monitors **Bosque das Faias** (Serra da Estrela) and **Parque da Cabreia** (Sever do Vouga) using publicly catalogued Sentinel-2 L2A scenes via Element 84 [Earth Search](https://earth-search.aws.element84.com/v1).
+
+- [Analysis script](scripts/satellite_probe.py) searches recent scenes and a July–August reference, reads narrow red/green/near-infrared cloud-optimized imagery and the scene-classification mask, and measures paired **NDVI and red/green reflectance-ratio differences** inside small (~400 m) sampling footprints.
+- [Analysis tests](tests/test_satellite_probe.py) assert that missing imagery cannot generate fabricated readings.
+- [Satellite workflow](.github/workflows/satellite.yml) runs weekly on Tuesdays during **September–December**, with a manual Run workflow option. It commits the measured JSON to [data/satellite-observations.json](data/satellite-observations.json).
+- The site reads the latest JSON from `raw.githubusercontent.com` because GitHub Pages **does not automatically rebuild** for commits made using Actions' built-in `GITHUB_TOKEN`; the last deployed JSON remains a fallback. GitHub Raw may briefly cache updates.
+- The UI displays actual acquisition dates, baseline dates and experimental spectral differences. **These metrics are not direct observations of leaf color, nor a validated foliage-stage classification**; canopy species, rain, phenology, shadows and atmospheric effects may all influence them.
+- If no suitable imagery is found or analysis fails, the JSON records `unavailable`, not fabricated readings. Coverage currently comprises **two forest sites only**; other foliage forecasts remain weather-based.
+
+Some additional provider requests and GitHub-hosted Actions compute are required. Public-repository Actions usage is generally free. See the public [privacy and sources notice](privacy.html).
