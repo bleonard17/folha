@@ -21,6 +21,7 @@
   "Choose a date to compare foliage timing across Portugal.": "Escolha uma data para comparar a evolução das cores de outono em Portugal.",
   "Forecast + seasonal estimates": "Previsão + estimativas sazonais",
   "Plan for": "Planear para",
+  "Search forests & places": "Pesquisar florestas e locais",
   "Sort destinations": "Ordenar destinos",
   "Best for your date": "Melhor para a sua data",
   "Peak coming soonest": "Pico mais próximo",
