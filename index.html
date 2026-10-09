@@ -28,6 +28,15 @@
     .map-view-switch button{border:0;background:none;color:#4b6250;font-size:11px;font-weight:700;padding:9px 12px;border-radius:7px;white-space:nowrap}
     .map-view-switch button[aria-pressed="true"]{background:#284936;color:#fff}.map-view-switch button:disabled{opacity:.45;cursor:not-allowed}
     .map-feedback{position:absolute;left:12px;bottom:11px;z-index:6;border-radius:7px;background:#fffdf2e6;color:#647363;font-weight:700;font-size:10px;padding:7px 9px;max-width:calc(100% - 24px);pointer-events:none}
+    .map-popup{position:absolute;z-index:9;width:min(290px,calc(100% - 24px));background:#fffefa;border:1px solid #dae4d8;border-radius:14px;box-shadow:0 12px 32px #223a303d;padding:13px 15px;transform:translate(-50%,-100%);font:12px var(--sans);color:var(--ink)}
+    .map-popup[hidden]{display:none}
+    .map-popup .popup-head{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+    .map-popup h4{font:500 17px var(--serif);margin:0;line-height:1.2}
+    .map-popup .popup-close{border:0;background:transparent;font-size:19px;line-height:1;cursor:pointer;color:#667a6b;padding:0 2px}
+    .map-popup .popup-stage{font-size:11px;margin:9px 0;color:#56715b}
+    .map-popup .popup-score{font-weight:800;color:#244938}
+    .map-popup .popup-peak{font-size:11px;color:#6c7d71;margin:6px 0}
+    .map-popup .popup-details{border:0;background:none;padding:6px 0 0;color:#a65b32;font-weight:800;font-size:11px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
     .maplibregl-control-container .maplibregl-ctrl-attrib{font-size:10px}
     .maplibregl-ctrl-group{box-shadow:0 2px 12px #213c2840!important}
     .maplibregl-marker{cursor:pointer}
@@ -54,7 +63,7 @@
     <div class="section-heading"><div><div class="eyebrow">Your autumn field guide</div><h2>Explore the color map</h2><p>Choose a date to compare foliage timing across Portugal.</p></div><span class="tag">● &nbsp; Forecast + seasonal estimates</span></div>
     <section class="dashboard" aria-label="Foliage dashboard">
       <div class="left-area"><div class="controls"><div class="control"><label for="visitDate">Plan for</label><input type="date" id="visitDate" aria-label="Visit date" /></div><div class="control"><label for="sortBy">Sort destinations</label><select id="sortBy" aria-label="Sort destinations"><option value="score">Best for your date</option><option value="peak">Peak coming soonest</option><option value="name">Name A–Z</option></select></div><div class="control"><label for="region">Region</label><select id="region" aria-label="Filter by region"><option value="all">All Portugal</option><option value="Norte">Norte</option><option value="Centro">Centro</option><option value="Alentejo">Alentejo</option><option value="Lisboa">Lisboa</option></select></div><div class="control"><label for="stage">Color stage</label><select id="stage" aria-label="Filter by foliage stage"><option value="all">All stages</option><option value="pre">Still green / early</option><option value="turn">Changing color</option><option value="peak">Near peak / peak</option><option value="post">Past peak</option></select></div></div><div class="search-row"><div class="searchbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input id="search" type="search" placeholder="Search forests & places" aria-label="Search forests and places" /></div><span class="count-label" id="resultCount">9 places</span></div><div class="cards" id="cards" aria-live="polite"></div></div>
-      <div class="map-area"><div class="map-shell"><div class="map-head"><b>Autumn across Portugal</b><div class="map-key"><span><i style="background:#73a16b"></i>Early</span><span><i style="background:#d89a3a"></i>Peak</span><span><i style="background:#a17b63"></i>Late</span></div></div><div class="map-container"><div class="map-view-switch" role="group" aria-label="Map appearance"><button id="mapStyleLandscape" type="button" aria-pressed="true">Landscape</button><button id="mapStyleMinimal" type="button" aria-pressed="false">Minimal</button></div><div id="mapFeedback" class="map-feedback" role="status">Interactive outline ready · loading detailed map…</div><button id="mapRetry" class="map-retry" type="button" hidden>Retry detailed map</button><div id="map" aria-label="Interactive Portugal destination map"></div><div id="mapFallback" class="map-fallback"><svg viewBox="0 0 330 500" role="group" aria-label="Clickable Portugal map destinations" style="width:100%;max-width:none;height:100%;position:absolute;inset:0"><rect width="330" height="500" fill="#dfece9"/><polygon points="142.7,83.5 163.7,64.6 187.4,53.7 201.9,90.2 236.1,90.1 246.0,80.7 279.7,83.3 295.9,120.8 269.1,141.0 268.4,199.2 259.0,210.1 256.7,245.4 231.7,251.5 254.9,296.3 238.9,345.3 258.8,367.5 250.9,387.8 229.4,415.8 234.3,440.5 211.0,459.8 180.5,449.3 150.6,457.6 159.4,399.2 154.0,353.3 128.1,346.4 114.3,318.1 118.9,269.2 141.9,242.2 146.0,212.0 158.1,167.1 156.8,135.5 145.3,108.7 142.7,83.5" fill="#bfd2b3" stroke="#84a48d" stroke-width="2"/><text x="145" y="250" fill="#456955" font-size="11" letter-spacing="3" font-family="Arial">PORTUGAL</text><text x="12" y="280" fill="#7f9ca4" font-size="8" font-family="Arial" letter-spacing="2">ATLANTIC</text><text x="260" y="270" fill="#456955" font-size="11" font-family="Arial" letter-spacing="2">SPAIN</text></svg><span style="position:absolute;left:12px;bottom:10px;color:#758577;font-size:10px">Vector map · geographic outline</span></div></div><div class="map-foot">Zoomable map with a built-in fallback. Markers show an <strong>estimated stage</strong> for your selected date—not verified live leaf colors. Select a marker or destination to explore.</div></div></div>
+      <div class="map-area"><div class="map-shell"><div class="map-head"><b>Autumn across Portugal</b><div class="map-key"><span><i style="background:#73a16b"></i>Early</span><span><i style="background:#d89a3a"></i>Peak</span><span><i style="background:#a17b63"></i>Late</span></div></div><div class="map-container"><div class="map-view-switch" role="group" aria-label="Map appearance"><button id="mapStyleLandscape" type="button" aria-pressed="true">Landscape</button><button id="mapStyleMinimal" type="button" aria-pressed="false">Minimal</button></div><div id="mapFeedback" class="map-feedback" role="status">Interactive outline ready · loading detailed map…</div><button id="mapRetry" class="map-retry" type="button" hidden>Retry detailed map</button><div id="map" aria-label="Interactive Portugal destination map"></div><div id="mapPopup" class="map-popup" role="region" aria-label="Selected map destination" hidden></div><div id="mapFallback" class="map-fallback"><svg viewBox="0 0 330 500" role="group" aria-label="Clickable Portugal map destinations" style="width:100%;max-width:none;height:100%;position:absolute;inset:0"><rect width="330" height="500" fill="#dfece9"/><polygon points="142.7,83.5 163.7,64.6 187.4,53.7 201.9,90.2 236.1,90.1 246.0,80.7 279.7,83.3 295.9,120.8 269.1,141.0 268.4,199.2 259.0,210.1 256.7,245.4 231.7,251.5 254.9,296.3 238.9,345.3 258.8,367.5 250.9,387.8 229.4,415.8 234.3,440.5 211.0,459.8 180.5,449.3 150.6,457.6 159.4,399.2 154.0,353.3 128.1,346.4 114.3,318.1 118.9,269.2 141.9,242.2 146.0,212.0 158.1,167.1 156.8,135.5 145.3,108.7 142.7,83.5" fill="#bfd2b3" stroke="#84a48d" stroke-width="2"/><text x="145" y="250" fill="#456955" font-size="11" letter-spacing="3" font-family="Arial">PORTUGAL</text><text x="12" y="280" fill="#7f9ca4" font-size="8" font-family="Arial" letter-spacing="2">ATLANTIC</text><text x="260" y="270" fill="#456955" font-size="11" font-family="Arial" letter-spacing="2">SPAIN</text></svg><span style="position:absolute;left:12px;bottom:10px;color:#758577;font-size:10px">Vector map · geographic outline</span></div></div><div class="map-foot">Zoomable map with a built-in fallback. Markers show an <strong>estimated stage</strong> for your selected date—not verified live leaf colors. Select a marker or destination to explore.</div></div></div>
     </section>
     <section class="detail" id="details" aria-label="Selected destination details"></section>
     <section class="method"><div><div class="eyebrow">Know before you go</div><h3>A helpful forecast, not a crystal ball.</h3><p>Foliage stages combine approximate local peak-season dates with recent cold nights and warm spells. Weather adds trip-planning context. Weather-informed estimates are not satellite observations; select a place to explore the satellite data source. Mountain valleys and individual tree species can differ substantially.</p></div><button class="btn btn-primary" type="button" id="aboutBottom">See the methodology ↗</button></section>
@@ -73,6 +82,16 @@
       {id:'bussaco',name:'Mata do Bussaco',locality:'Luso · Mealhada',region:'Centro',lat:40.379,lon:-8.365,peak:'11-15',trees:'Mixed ornamental and native trees',description:'A leafy historic forest full of botanical variety, walking trails and the famous Bussaco Palace.',tags:['Historic gardens','Easy walks']},
       {id:'lousa',name:'Serra da Lousã',locality:'Talasnal · Lousã',region:'Centro',lat:40.092,lon:-8.235,peak:'11-09',trees:'Oak and chestnut pockets',description:'Autumn woods frame the stone buildings and trails of the Serra da Lousã schist villages.',tags:['Schist villages','Hiking']},
       {id:'mamede',name:'Serra de São Mamede',locality:'Marvão · Alto Alentejo',region:'Alentejo',lat:39.39,lon:-7.377,peak:'11-09',trees:'Chestnut groves',description:'Chestnut-lined paths and copper-colored hillsides near Marvão and Castelo de Vide.',tags:['Chestnut trees','Countryside']},
+      {id:'vinhais',name:'Castanheiros de Vinhais',locality:'Vinhais · Trás-os-Montes',region:'Norte',lat:41.836,lon:-7.005,peak:'10-30',trees:'Chestnut groves and mixed woodland',description:'Autumn chestnut landscapes near Vinhais. Foliage varies across the wider area; the marker represents a general starting point rather than a specific grove entrance.',tags:['Chestnut groves','Villages'],provisional:true},
+      {id:'bertiandos',name:'Lagoas de Bertiandos',locality:'Ponte de Lima · Alto Minho',region:'Norte',lat:41.788,lon:-8.628,peak:'11-08',trees:'Wetland-edge willow, alder and mixed woodland',description:'Protected lagoons and shaded wetland trails near Ponte de Lima. Look for changing leaves in riparian trees; open water and evergreen patches will not show the same colors.',tags:['Wetlands','Easy walks'],provisional:true},
+      {id:'sistelo',name:'Sistelo · Vale do Vez',locality:'Arcos de Valdevez · Minho',region:'Norte',lat:41.983,lon:-8.375,peak:'11-04',trees:'Riverside deciduous trees and valley woodlands',description:'The terraces and river valley around Sistelo offer pockets of seasonal color rather than continuous deciduous forest. This map point represents the village area.',tags:['Riverside','Mountain villages'],provisional:true},
+      {id:'alvao',name:'Parque Natural do Alvão',locality:'Ermelo · Mondim de Basto',region:'Norte',lat:41.383,lon:-7.874,peak:'11-06',trees:'Oak woodland and mixed mountain vegetation',description:'The Olo river valley and wooded slopes around Ermelo offer trails and patches of autumn color. Upper moorland areas may stay relatively open and green.',tags:['Natural park','Hiking'],provisional:true},
+      {id:'paiva',name:'Passadiços do Paiva',locality:'Arouca · Rio Paiva',region:'Norte',lat:40.966,lon:-8.157,peak:'11-10',trees:'Riverside broadleaf woodland and mixed slopes',description:'Boardwalks alongside the Paiva river with seasonal color in selected riparian trees. The route may require advance tickets and can close in poor weather.',tags:['River trail','Geopark'],provisional:true},
+      {id:'freita',name:'Serra da Freita',locality:'Arouca · Frecha da Mizarela',region:'Norte',lat:40.86,lon:-8.279,peak:'11-07',trees:'Mixed mountain woodland and riverside trees',description:'Mountain viewpoints, waterfall scenery and scattered woodland near Frecha da Mizarela. Leaf colors are patchy across this high, mixed-vegetation landscape.',tags:['Mountain','Waterfall'],provisional:true},
+      {id:'caramulo',name:'Serra do Caramulo',locality:'Tondela · Caramulo',region:'Centro',lat:40.571,lon:-8.166,peak:'11-10',trees:'Oak, chestnut and mixed mountain woodland',description:'Highland woods and valley trails with local oak and chestnut stands. This point is an approximate reference for the Caramulo area.',tags:['Mountain trails','Woodlands'],provisional:true},
+      {id:'choupal',name:'Mata Nacional do Choupal',locality:'Coimbra · Rio Mondego',region:'Centro',lat:40.222,lon:-8.44,peak:'11-17',trees:'Poplars and riverside deciduous trees',description:'A riverside national forest close to Coimbra, known for its tall poplars and shaded trails. Particularly suited to watching broadleaf trees change season.',tags:['Poplars','Easy walks'],provisional:true},
+      {id:'setemontes',name:'Mata dos Sete Montes',locality:'Tomar · Convento de Cristo',region:'Centro',lat:39.603,lon:-8.418,peak:'11-18',trees:'Oak and other mixed historic woodland',description:'A historic wooded park below Tomar’s Convent of Christ, with a mix of evergreen and deciduous specimens and easy walks.',tags:['Historic forest','Easy walks'],provisional:true},
+      {id:'pena',name:'Parque da Pena',locality:'Sintra · Serra de Sintra',region:'Lisboa',lat:38.787,lon:-9.389,peak:'11-19',trees:'Mixed ornamental deciduous and evergreen collections',description:'Romantic parkland with a diverse botanical collection. Some specimens change color while abundant evergreen trees remain green. Admission may be required.',tags:['Botanical park','Sintra'],provisional:true},
       {id:'monserrate',name:'Parque de Monserrate',locality:'Sintra · Lisbon area',region:'Lisboa',lat:38.793,lon:-9.419,peak:'11-19',trees:'Mixed botanical collection',description:'An ornate botanical garden with varied deciduous and evergreen trees, misty paths and a historic palace.',tags:['Botanical garden','Near Lisbon']}
     ];
     const $ = id => document.getElementById(id);
@@ -89,7 +108,7 @@
     const firstSaturday = s => {const w=parseDate(s).getUTCDay();return dateAdd(s,(6-w+7)%7)};
     const forecastWeather = p => state.weather[p.id] || null;
     const weatherDay = (p,date) => {const w=forecastWeather(p),i=w?.daily?.time?.indexOf(date);if(i===undefined||i<0)return null;const d=w.daily;return {max:d.temperature_2m_max?.[i],min:d.temperature_2m_min?.[i],mean:d.temperature_2m_mean?.[i],rain:d.precipitation_sum?.[i],wind:d.wind_gusts_10m_max?.[i],code:d.weather_code?.[i]}};
-    const state={date:firstSaturday(today),weather:{},loaded:false,source:'loading',selected:'sever',map:null,markers:{},shown:[],satellite:{},mapStyle:'liberty',mapReady:false};
+    const state={date:firstSaturday(today),weather:{},loaded:false,source:'loading',selected:'sever',popupPlace:null,map:null,markers:{},shown:[],satellite:{},mapStyle:'liberty',mapReady:false};
     function weatherShift(p){const w=forecastWeather(p);if(!w?.daily?.time)return 0;let cold=0,hot=0,days=0;for(let i=0;i<w.daily.time.length;i++){const d=w.daily.time[i];if(dayDiff(d,today)>0||dayDiff(today,d)>21||d.slice(5)< '09-15')continue;const lo=w.daily.temperature_2m_min?.[i],hi=w.daily.temperature_2m_max?.[i];if(!Number.isFinite(lo)||!Number.isFinite(hi))continue;days++;if(lo<9)cold++;if(hi>21)hot++}if(days<8)return 0;return clamp(Math.round((hot/days)*4-(cold/days)*6),-5,5)}
     function forecastPeak(p){return dateAdd(peakDate(p),weatherShift(p))}
     function progress(p,date){return clamp(Math.round(70+dayDiff(date,forecastPeak(p))*2.9),0,100)}
@@ -97,7 +116,7 @@
     function score(p,date){const prog=progress(p,date);let color=clamp(100-Math.abs(prog-70)*1.65,0,100);const wd=weatherDay(p,date);let penalty=0;if(wd){penalty+=clamp((wd.rain||0)*2.4,0,36);penalty+=clamp(((wd.wind||0)-30)*.7,0,22);if((wd.max??14)<4)penalty+=10;}return Math.round(clamp(color-penalty,0,100))}
     function advice(p,date){const prog=progress(p,date),w=weatherDay(p,date),s=score(p,date);if(prog<45)return 'Color is likely still developing';if(prog>93)return 'Most deciduous leaves may have fallen';if(w?.rain>=10)return 'Promising color, but a wet visit is forecast';if(w?.wind>=45)return 'Strong winds could disrupt a forest visit';if(s>=75)return 'One of the better visits for your date';if(s>=50)return 'Worth considering for autumn color';return 'Check timing and local trail conditions'}
     const dayIcon = w => {if(!w)return '–';if(w.code>=95)return '⛈';if(w.code>=71)return '❄️';if(w.code>=51)return '🌧️';if(w.code>=45)return '🌫️';if(w.code>=3)return '☁️';if(w.code>=1)return '⛅';return '☀️'};
-    function scoredPlaces(){const arr=PLACES.filter(p=>($('region').value==='all'||p.region===$('region').value)&&($('stage').value==='all'||stageInfo(progress(p,state.date)).group===$('stage').value)&&`${p.name} ${p.locality} ${p.region} ${p.trees}`.toLowerCase().includes($('search').value.toLowerCase().trim()));const sort=$('sortBy').value;arr.sort((a,b)=>sort==='name'?a.name.localeCompare(b.name):sort==='peak'?dayDiff(forecastPeak(a),forecastPeak(b)):score(b,state.date)-score(a,state.date)||a.name.localeCompare(b.name));return arr}
+    function scoredPlaces(){const arr=PLACES.filter(p=>($('region').value==='all'||p.region===$('region').value)&&($('stage').value==='all'||stageInfo(progress(p,state.date)).group===$('stage').value)&&`${p.name} ${p.locality} ${p.region} ${p.trees}`.toLowerCase().includes($('search').value.toLowerCase().trim()));const sort=$('sortBy').value;arr.sort((a,b)=>sort==='name'?a.name.localeCompare(b.name):sort==='peak'?dayDiff(forecastPeak(a),forecastPeak(b)):score(b,state.date)-score(a,state.date)||Number(!!b.featured)-Number(!!a.featured)||a.name.localeCompare(b.name));return arr}
     function renderCards(){const places=scoredPlaces();state.shown=places;$('resultCount').textContent=`${places.length} place${places.length===1?'':'s'}`;$('cards').innerHTML=places.length?places.map(p=>{const n=progress(p,state.date),stage=stageInfo(n),peak=forecastPeak(p),w=weatherDay(p,state.date),weather=w?` · ${Math.round(w.max)}°C · ${Math.round(w.rain||0)} mm rain`:'';return `<article role="button" tabindex="0" class="place-card ${state.selected===p.id?'selected':''}" data-place="${p.id}" aria-label="Explore ${p.name}"><div class="place-head"><div><div class="place-title">${p.name}</div><div class="place-sub">${p.locality}${p.featured?' &nbsp;·&nbsp; ★ Featured':''}</div></div><span class="stage-chip" style="--chip-bg:${stage.bg};--chip-fg:${stage.fg}">${stage.name}</span></div><div class="place-meter" style="--point:${n}%" aria-label="Estimated season progression ${n} percent"></div><div class="place-bottom"><span>Est. peak: <strong>${fmt(dateAdd(peak,-6))}–${fmt(dateAdd(peak,6))}</strong></span><span class="mini-best">${Math.round(score(p,state.date))}/100 timing${weather?'':''}</span></div></article>`}).join(''):`<div class="no-results">No forests match those filters.<br>Try another region or foliage stage.</div>`;
       for(const el of $('cards').querySelectorAll('[data-place]')){const choose=()=>selectPlace(el.dataset.place);el.addEventListener('click',choose);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}})}
       updateMarkers();
@@ -125,14 +144,57 @@
     function renderDetail(){const p=PLACES.find(x=>x.id===state.selected)||PLACES[0];const peak=forecastPeak(p),n=progress(p,state.date),stage=stageInfo(n),w=weatherDay(p,state.date),forecastAvail=state.loaded&&!!w;const seven=Array.from({length:7},(_,i)=>dateAdd(state.date,i));const periodWeather=seven.map(x=>weatherDay(p,x));let relevantForecast=periodWeather.some(Boolean);const strips=seven.map((d,i)=>{const dW=periodWeather[i],sat=parseDate(d).getUTCDay();return `<div class="day ${i===0?'highlight':''}"><div class="weekday">${fmt(d,{weekday:'short'})}</div><div class="weather-icon" aria-label="Weather icon">${dayIcon(dW)}</div><div class="temps">${dW?`${Math.round(dW.max)}°/${Math.round(dW.min)}°`:'—'}</div><div class="precip">${dW?`${Math.round(dW.rain||0)} mm`:'No forecast'}</div></div>`}).join('');
       $('details').innerHTML=`<div class="detail-banner"><div class="eyebrow">Destination spotlight &nbsp; · &nbsp; ${p.region}</div><h2>${p.name}</h2><p>${p.description}</p></div><div class="detail-inner"><div class="detail-top"><div><h3>${stage.name} <span style="font:600 12px var(--sans);color:${stage.hex}">● Estimated</span></h3><p>${advice(p,state.date)}.</p></div><a class="btn btn-primary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${p.lat}%2C${p.lon}">Open in Maps ↗</a></div><div class="detail-grid"><div class="detail-stat"><span>Typical peak*</span><b>${fmt(peak)}</b><small>± roughly one week</small></div><div class="detail-stat"><span>Visit-date timing</span><b>${score(p,state.date)}/100</b><small>Heuristic score</small></div><div class="detail-stat"><span>Visit-day high</span><b>${w?Math.round(w.max)+'°C':'—'}</b><small>${w?'Forecast':'Not available yet'}</small></div><div class="detail-stat"><span>Visit-day rain</span><b>${w?Number(w.rain||0).toFixed(1)+' mm':'—'}</b><small>${w?'Forecast':'Not available yet'}</small></div></div><div class="forecast-title"><h3>Weather outlook</h3><span>${relevantForecast?'Open-Meteo daily forecast':'Outside available forecast / offline'}</span></div><div class="day-strip">${strips}</div><p class="peak-help"><strong>About this forest:</strong> ${p.trees}. The estimated peak window runs ${fmt(dateAdd(peak,-6),{day:'numeric',month:'long'})}–${fmt(dateAdd(peak,6),{day:'numeric',month:'long'})}. *Weather may shift the center of a typical window by a few days; it does not verify foliage on the ground.</p><div class="notice"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 11v6m0-10v1"/></svg><span>${!state.loaded?'Live weather could not be loaded. The foliage timing shown is based on the seasonal calendar only.':!forecastAvail?'No daily weather forecast is available for your selected visit date. Scores reflect foliage timing only.':'Weather forecasts are model predictions and may change. Color stage is still only an estimate; verify local photos, trail access and conditions before traveling.'}</span></div>${satellitePanel(p)}</div>`;
     }
-    function render(){renderMetrics();renderCards();renderDetail();}
-    function selectPlace(id){
+    function render(){renderMetrics();renderCards();renderDetail();if(state.popupPlace)showMapPopup(state.popupPlace);}
+    function selectPlace(id,options={}){
+      const fromMap=options.fromMap===true;
       state.selected=id;renderCards();renderDetail();
-      if(state.map && state.mapReady && state.markers[id]){
-        const p=PLACES.find(x=>x.id===id);
-        state.map.flyTo({center:[p.lon,p.lat],zoom:Math.max(state.map.getZoom(),8.2),duration:800});
+      if(fromMap)showMapPopup(id);
+      else{
+        hideMapPopup();
+        if(state.map && state.mapReady && state.markers[id]){
+          const p=PLACES.find(x=>x.id===id);
+          state.map.flyTo({center:[p.lon,p.lat],zoom:Math.max(state.map.getZoom(),8.2),duration:800});
+        }
+        if(window.matchMedia('(max-width:750px)').matches)$('details').scrollIntoView({behavior:'smooth',block:'start'});
       }
-      if(window.matchMedia('(max-width:750px)').matches)$('details').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function hideMapPopup(){
+      state.popupPlace=null;
+      $('mapPopup').hidden=true;
+    }
+    function positionMapPopup(){
+      const p=PLACES.find(x=>x.id===state.popupPlace);
+      const popup=$('mapPopup'),area=document.querySelector('.map-container');
+      if(!p||popup.hidden)return;
+      const anchor=state.mapReady&&state.markers[p.id]
+        ?state.markers[p.id].getElement()
+        :document.querySelector('[data-map-place="'+p.id+'"]');
+      if(!anchor)return;
+      const a=anchor.getBoundingClientRect(),b=area.getBoundingClientRect();
+      if(!a.width&&!a.height)return;
+      const half=popup.getBoundingClientRect().width/2;
+      const x=clamp(a.left+a.width/2-b.left,half+9,Math.max(half+9,b.width-half-9));
+      const y=a.top+a.height/2-b.top;
+      const above=y>=popup.getBoundingClientRect().height+22;
+      popup.style.left=x+'px';
+      popup.style.top=(above?y-15:y+17)+'px';
+      popup.style.transform=above?'translate(-50%,-100%)':'translate(-50%,0)';
+    }
+    function showMapPopup(id){
+      const p=PLACES.find(x=>x.id===id);
+      if(!p)return;
+      state.popupPlace=id;
+      const n=stageInfo(progress(p,state.date));
+      const peak=forecastPeak(p);
+      const popup=$('mapPopup');
+      popup.innerHTML=`<div class="popup-head"><h4>${p.name}</h4><button type="button" class="popup-close" aria-label="Close map tooltip">×</button></div><div class="popup-stage"><span style="color:${n.hex}">●</span> ${n.name} · <span class="popup-score">${score(p,state.date)}/100 timing</span></div><div class="popup-peak">Estimated peak: ${fmt(dateAdd(peak,-6))}–${fmt(dateAdd(peak,6))}</div><button type="button" class="popup-details">View destination details ↓</button>`;
+      popup.hidden=false;
+      popup.querySelector('.popup-close').addEventListener('click',hideMapPopup);
+      popup.querySelector('.popup-details').addEventListener('click',()=>{
+        $('details').scrollIntoView({behavior:'smooth',block:'start'});
+      });
+      positionMapPopup();
     }
     function createMarkers(){
       if(!state.map)return;
@@ -140,7 +202,7 @@
         const el=document.createElement('button');
         el.type='button';el.className='map-dot';el.title=p.name;
         el.setAttribute('aria-label',`Explore ${p.name}`);
-        el.addEventListener('click',e=>{e.stopPropagation();selectPlace(p.id)});
+        el.addEventListener('click',e=>{e.stopPropagation();selectPlace(p.id,{fromMap:true})});
         const marker=new maplibregl.Marker({element:el,anchor:'center'}).setLngLat([p.lon,p.lat]).addTo(state.map);
         state.markers[p.id]=marker;
       });
@@ -194,6 +256,7 @@
           state.mapReady=true;
           $('map').style.visibility='visible';
           $('mapFallback').style.display='none';
+          positionMapPopup();
           setMapFeedback('Detailed map ready');
           window.setTimeout(()=>{if(state.mapReady)$('mapFeedback').style.display='none'},1700);
         });
@@ -218,11 +281,12 @@
         const pin=document.createElementNS(NS,'circle');pin.classList.add('pin');pin.setAttribute('r','7.5');pin.setAttribute('fill','#6b9b69');
         const title=document.createElementNS(NS,'title');title.textContent=p.name;
         group.append(halo,pin,title);
-        group.addEventListener('click',()=>selectPlace(p.id));
-        group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectPlace(p.id)}});
+        group.addEventListener('click',()=>selectPlace(p.id,{fromMap:true}));
+        group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectPlace(p.id,{fromMap:true})}});
         svg.appendChild(group);
       });
       updateMarkers();
+      positionMapPopup();
     }
     function showFallbackMap(message='Interactive outline · detailed map unavailable'){
       state.mapReady=false;
@@ -235,6 +299,7 @@
       setMapFeedback(message);
       initFallbackMarkers();
       updateMarkers();
+      positionMapPopup();
     }
     function loadScript(url,timeoutMs=7000){
       return new Promise((resolve,reject)=>{
@@ -280,6 +345,7 @@
           try{
             map=new maplibregl.Map({container:'map',style:MAP_STYLES[state.mapStyle],center:[-8.2,39.7],zoom:6.25,minZoom:5.7,maxZoom:15,scrollZoom:false,dragRotate:false,pitchWithRotate:false,attributionControl:true,cooperativeGestures:true});
             state.map=map;
+            map.on('move',positionMapPopup);
             map.addControl(new maplibregl.NavigationControl({showCompass:false}),'bottom-right');
             map.once('load',()=>{
               if(attempt!==mapAttempt)return settle(new Error('Superseded'));
@@ -304,6 +370,7 @@
         $('mapFallback').style.display='none';
         $('mapRetry').hidden=true;
         updateMarkers();
+        positionMapPopup();
         setMapFeedback('Detailed map ready · © OpenStreetMap contributors');
         window.setTimeout(()=>{if(state.mapReady)$('mapFeedback').style.display='none'},2500);
       }catch(e){
@@ -314,11 +381,11 @@
         console.warn('Detailed map unavailable, using built-in map:',e);
       }
     }
-    async function loadWeather(){const u=new URL('https://api.open-meteo.com/v1/forecast');u.searchParams.set('latitude',PLACES.map(p=>p.lat).join(','));u.searchParams.set('longitude',PLACES.map(p=>p.lon).join(','));u.searchParams.set('daily','temperature_2m_max,temperature_2m_min,temperature_2m_mean,precipitation_sum,wind_gusts_10m_max,weather_code');u.searchParams.set('past_days','45');u.searchParams.set('forecast_days','14');u.searchParams.set('timezone','Europe/Lisbon');let data;let cacheUsed=false;try{const cache=JSON.parse(localStorage.getItem('folha-weather-v1')||'null');if(cache&&cache.saved&&Date.now()-cache.saved<60*60*1000&&Array.isArray(cache.payload)){data=cache.payload;cacheUsed=true}}catch(e){}
-      if(!data){try{const ctl=new AbortController();const timeout=setTimeout(()=>ctl.abort(),14000);let r;try{r=await fetch(u.toString(),{signal:ctl.signal})}finally{clearTimeout(timeout)}if(!r.ok)throw Error('HTTP '+r.status);data=await r.json();if(!Array.isArray(data))data=[data];if(data.length!==PLACES.length||!data.every(x=>x.daily&&x.daily.time))throw Error('Incomplete weather response');try{localStorage.setItem('folha-weather-v1',JSON.stringify({saved:Date.now(),payload:data}))}catch(e){}}catch(e){console.warn('Weather unavailable:',e.message);state.source='offline';state.loaded=false;$('apiDot').classList.add('offline');$('dataStatus').textContent='Seasonal estimates · weather offline';render();return}}
+    async function loadWeather(){const u=new URL('https://api.open-meteo.com/v1/forecast');u.searchParams.set('latitude',PLACES.map(p=>p.lat).join(','));u.searchParams.set('longitude',PLACES.map(p=>p.lon).join(','));u.searchParams.set('daily','temperature_2m_max,temperature_2m_min,temperature_2m_mean,precipitation_sum,wind_gusts_10m_max,weather_code');u.searchParams.set('past_days','45');u.searchParams.set('forecast_days','14');u.searchParams.set('timezone','Europe/Lisbon');let data;let cacheUsed=false;try{const cache=JSON.parse(localStorage.getItem('folha-weather-v2')||'null');if(cache&&cache.saved&&Date.now()-cache.saved<60*60*1000&&Array.isArray(cache.payload)&&cache.payload.length===PLACES.length){data=cache.payload;cacheUsed=true}}catch(e){}
+      if(!data){try{const ctl=new AbortController();const timeout=setTimeout(()=>ctl.abort(),14000);let r;try{r=await fetch(u.toString(),{signal:ctl.signal})}finally{clearTimeout(timeout)}if(!r.ok)throw Error('HTTP '+r.status);data=await r.json();if(!Array.isArray(data))data=[data];if(data.length!==PLACES.length||!data.every(x=>x.daily&&x.daily.time))throw Error('Incomplete weather response');try{localStorage.setItem('folha-weather-v2',JSON.stringify({saved:Date.now(),payload:data}))}catch(e){}}catch(e){console.warn('Weather unavailable:',e.message);state.source='offline';state.loaded=false;$('apiDot').classList.add('offline');$('dataStatus').textContent='Seasonal estimates · weather offline';render();return}}
       data.forEach((v,i)=>{state.weather[PLACES[i].id]=v});state.loaded=true;state.source=cacheUsed?'cached':'live';$('apiDot').classList.remove('offline');$('dataStatus').textContent=cacheUsed?'Recent weather data · cached':'Weather data connected';render();}
     function openModal(){const backdrop=$('modalBackdrop');backdrop.classList.add('open');$('closeModal').focus();document.body.style.overflow='hidden'}function closeModal(){ $('modalBackdrop').classList.remove('open');document.body.style.overflow=''}
-    function init(){const start=`${thisSeasonYear}-09-15`,end=`${thisSeasonYear}-12-15`;$('visitDate').min=today>start?today:start;$('visitDate').max=end;if(state.date>end)state.date=`${thisSeasonYear}-10-01`;if(state.date<start)state.date=start;if(state.date<today&&today<=end)state.date=today;$('visitDate').value=state.date;$('todayPill').textContent=`${fmt(today,{day:'numeric',month:'long',year:'numeric'})} · Portugal`;$('copyrightYear').textContent=String(new Date().getFullYear());$('visitDate').addEventListener('change',e=>{if(e.target.value){state.date=e.target.value;render()}});for(const id of ['sortBy','region','stage'])$(id).addEventListener('change',render);$('search').addEventListener('input',render);$('mapStyleLandscape').addEventListener('click',()=>setMapStyle('liberty'));$('mapStyleMinimal').addEventListener('click',()=>setMapStyle('positron'));$('mapRetry').addEventListener('click',()=>initMap());$('aboutNav').addEventListener('click',openModal);$('aboutBottom').addEventListener('click',openModal);$('closeModal').addEventListener('click',closeModal);$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});initMap();render();loadWeather();loadSatelliteObservations()}
+    function init(){const start=`${thisSeasonYear}-09-15`,end=`${thisSeasonYear}-12-15`;$('visitDate').min=today>start?today:start;$('visitDate').max=end;if(state.date>end)state.date=`${thisSeasonYear}-10-01`;if(state.date<start)state.date=start;if(state.date<today&&today<=end)state.date=today;$('visitDate').value=state.date;$('todayPill').textContent=`${fmt(today,{day:'numeric',month:'long',year:'numeric'})} · Portugal`;$('copyrightYear').textContent=String(new Date().getFullYear());$('visitDate').addEventListener('change',e=>{if(e.target.value){state.date=e.target.value;render()}});for(const id of ['sortBy','region','stage'])$(id).addEventListener('change',render);$('search').addEventListener('input',render);$('mapStyleLandscape').addEventListener('click',()=>setMapStyle('liberty'));$('mapStyleMinimal').addEventListener('click',()=>setMapStyle('positron'));$('mapRetry').addEventListener('click',()=>initMap());window.addEventListener('resize',positionMapPopup);$('aboutNav').addEventListener('click',openModal);$('aboutBottom').addEventListener('click',openModal);$('closeModal').addEventListener('click',closeModal);$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});initMap();render();loadWeather();loadSatelliteObservations()}
     // Fix date minimum on browsers by using a normal variable; avoid relying on parsing locale strings.
     window.addEventListener('DOMContentLoaded',init);
   })();
