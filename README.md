@@ -25,3 +25,7 @@ Foliage stage and peak dates are **experimental estimates**, using typical regio
 ## Deployment
 
 In this repository, open **Settings → Pages**. Under **Build and deployment**, select **Deploy from a branch**, choose **main** and **/(root)**, then **Save**. GitHub will publish at the URL above, usually within a few minutes.
+
+### If GitHub Pages shows 404
+
+Check **Actions** for a completed `pages build and deployment` run. If the branch-based site hasn't built, make a small edit using the GitHub website while signed in as the repository owner; GitHub requires a commit from an admin with a verified email for branch publishing.
