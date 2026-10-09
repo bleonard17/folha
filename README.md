@@ -58,15 +58,16 @@ Tourism and nature references: [Visit Portugal — Alvão](https://www.visitport
 
 Data caveat: nineteen destinations are **curated locations, not comprehensive Portugal-wide coverage**, and scores/peak dates remain experimental weather-informed approximations rather than observations of actual leaf colors.
 
-## Live Sentinel-2 spectral pilot (October 2026)
+## Sentinel-2 pilot: all 19 curated destinations (October 2026)
 
-An automated **experimental** analysis now monitors **Bosque das Faias** (Serra da Estrela) and **Parque da Cabreia** (Sever do Vouga) using publicly catalogued Sentinel-2 L2A scenes via Element 84 [Earth Search](https://earth-search.aws.element84.com/v1).
+The experimental satellite pipeline **attempts a new observation for every one of the 19 listed destinations** in the four regions currently represented: **Norte (8), Centro (8), Lisboa (2) and Alentejo (1)**. It is *not* full-coverage mapping of these regions, and does not include every forest in Portugal or island regions.
 
-- [Analysis script](scripts/satellite_probe.py) searches recent scenes and a July–August reference, reads narrow red/green/near-infrared cloud-optimized imagery and the scene-classification mask, and measures paired **NDVI and red/green reflectance-ratio differences** inside small (~400 m) sampling footprints.
-- [Analysis tests](tests/test_satellite_probe.py) assert that missing imagery cannot generate fabricated readings.
-- [Satellite workflow](.github/workflows/satellite.yml) runs weekly on Tuesdays during **September–December**, with a manual Run workflow option. It commits the measured JSON to [data/satellite-observations.json](data/satellite-observations.json).
-- The site reads the latest JSON from `raw.githubusercontent.com` because GitHub Pages **does not automatically rebuild** for commits made using Actions' built-in `GITHUB_TOKEN`; the last deployed JSON remains a fallback. GitHub Raw may briefly cache updates.
-- The UI displays actual acquisition dates, baseline dates and experimental spectral differences. **These metrics are not direct observations of leaf color, nor a validated foliage-stage classification**; canopy species, rain, phenology, shadows and atmospheric effects may all influence them.
-- If no suitable imagery is found or analysis fails, the JSON records `unavailable`, not fabricated readings. Coverage currently comprises **two forest sites only**; other foliage forecasts remain weather-based.
+- [Analysis script](scripts/satellite_probe.py) uses Element 84 [Earth Search](https://earth-search.aws.element84.com/v1) to locate Sentinel-2 L2A imagery. A locally cloud-screened **~400 × 400 m sample centered on each destination's representative map point** is compared with a July–August reference.
+- The sample can include paths, farmland, wetland, ornamental gardens or evergreen trees. **It is not guaranteed to represent the named forest or the whole natural park.** For some sites, there may be too few usable vegetated pixels to report a measurement.
+- When sufficient real satellite observations are available, the website shows measured differences in NDVI and red/green reflectance, acquisition date, and a deliberately cautious plain-language interpretation. A spectral change **does not establish leaf color, peak foliage or trip readiness**.
+- A location with no reliable sample displays `unavailable`; missing data is **not invented or presented as "green."**
+- The [regional GitHub Actions workflow](.github/workflows/satellite.yml) runs every Tuesday in September–December or on demand. Four parallel regional jobs produce partial results, and a final validation step checks that exactly all 19 expected destinations are accounted for before committing an updated JSON feed.
+- [Tests](tests/test_satellite_probe.py) check no synthetic readings, region/site completeness, and that no unvalidated observations are labeled as verified foliage stages.
+- The site reads the committed [JSON](data/satellite-observations.json) from the GitHub raw endpoint (with a published-file fallback), since `GITHUB_TOKEN` commits do not automatically trigger a Pages rebuild. Cached results may update with a delay.
 
-Some additional provider requests and GitHub-hosted Actions compute are required. Public-repository Actions usage is generally free. See the public [privacy and sources notice](privacy.html).
+This remains a scientific *prototype*, not a validated seasonal foliage monitoring service. See the [privacy and sources notice](privacy.html).
