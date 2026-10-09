@@ -1,0 +1,50 @@
+name: Build social preview image
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - social-preview.svg
+
+permissions:
+  contents: write
+
+jobs:
+  render-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Render social-preview.svg to 1200x630 PNG
+        run: |
+          python -m pip install --quiet 'CairoSVG==2.8.2'
+          python - <<'PY'
+          import cairosvg, struct
+          cairosvg.svg2png(url="social-preview.svg", write_to="og-image.png",
+                            output_width=1200, output_height=630)
+          with open("og-image.png","rb") as f:
+              header=f.read(24)
+          assert header[:8] == b'\x89PNG\r\n\x1a\n', "Not a PNG"
+          assert struct.unpack(">II",header[16:24]) == (1200,630), "Wrong dimensions"
+          print("Verified og-image.png: PNG 1200x630")
+          PY
+
+      - name: Commit generated PNG to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add og-image.png
+          if git diff --cached --quiet; then
+            echo "Share image unchanged."
+          else
+            git commit -m "Generate 1200x630 social sharing preview"
+            git push
+          fi
