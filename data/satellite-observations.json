@@ -1,9 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-09T11:28:08+00:00",
+  "generated_at": "2026-10-09T14:38:32+00:00",
   "source": "Element 84 Earth Search Sentinel-2 C1 L2A",
   "source_url": "https://earth-search.aws.element84.com/v1",
-  "method": "Small-area cloud-screened spectral index comparison against summer reference; NOT a verified autumn leaf-color observation",
+  "method": "Cloud-screened 400 m sample around each representative map coordinate compared with summer; NOT verified autumn leaf color or region-wide vegetation",
+  "sampling_scope": "representative_point_400m",
+  "coverage": "19 curated destinations across Norte, Centro, Lisboa and Alentejo",
+  "region": null,
   "destinations": {
     "sever": {
       "status": "experimental",
@@ -11,6 +14,8 @@
       "stage": null,
       "model": "sentinel2_summer_comparison_experimental_v1",
       "site_name": "Sever do Vouga — Parque da Cabreia",
+      "region": "Centro",
+      "sampling_scope": "representative_point_400m",
       "site_center": {
         "lat": 40.752806,
         "lon": -8.390222
@@ -41,6 +46,8 @@
       "stage": null,
       "model": "sentinel2_summer_comparison_experimental_v1",
       "site_name": "Bosque das Faias",
+      "region": "Centro",
+      "sampling_scope": "representative_point_400m",
       "site_center": {
         "lat": 40.413475,
         "lon": -7.511206
@@ -63,6 +70,550 @@
       "baseline_tile_cloud_cover_pct": 6.305663,
       "latest_local_vegetation_pixels": 248,
       "baseline_local_vegetation_pixels": 248,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "geres": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Mata da Albergaria",
+      "region": "Norte",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 41.785,
+        "lon": -8.145
+      },
+      "metrics": {
+        "sampled_pixels": 45,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.664,
+        "latest_ndvi": 0.736,
+        "ndvi_difference": 0.072,
+        "baseline_red_green_ratio": 0.894,
+        "latest_red_green_ratio": 0.933,
+        "red_green_ratio_difference": 0.04
+      },
+      "latest_date": "2026-10-08",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2C_T29TNG_20261008T113446_L2A",
+      "baseline_scene": "S2A_T29TNG_20260831T113332_L2A",
+      "latest_tile_cloud_cover_pct": 2.076111,
+      "baseline_tile_cloud_cover_pct": 22.491093,
+      "latest_local_vegetation_pixels": 248,
+      "baseline_local_vegetation_pixels": 45,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "montesinho": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Montesinho",
+      "region": "Norte",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 41.936,
+        "lon": -6.763
+      },
+      "metrics": {
+        "sampled_pixels": 115,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.66,
+        "latest_ndvi": 0.718,
+        "ndvi_difference": 0.058,
+        "baseline_red_green_ratio": 1.083,
+        "latest_red_green_ratio": 1.01,
+        "red_green_ratio_difference": -0.072
+      },
+      "latest_date": "2026-09-25",
+      "baseline_date": "2026-08-21",
+      "latest_scene": "S2C_T29TPG_20260925T112610_L2A",
+      "baseline_scene": "S2B_T29TPG_20260821T112228_L2A",
+      "latest_tile_cloud_cover_pct": 6.055683,
+      "baseline_tile_cloud_cover_pct": 6.139976,
+      "latest_local_vegetation_pixels": 122,
+      "baseline_local_vegetation_pixels": 115,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "margaraca": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Mata da Margaraça",
+      "region": "Centro",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 40.213,
+        "lon": -7.923
+      },
+      "metrics": {
+        "sampled_pixels": 102,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.61,
+        "latest_ndvi": 0.588,
+        "ndvi_difference": -0.023,
+        "baseline_red_green_ratio": 0.881,
+        "latest_red_green_ratio": 0.943,
+        "red_green_ratio_difference": 0.062
+      },
+      "latest_date": "2026-10-07",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2A_T29TNE_20261007T112125_L2A",
+      "baseline_scene": "S2B_T29TNE_20260831T112515_L2A",
+      "latest_tile_cloud_cover_pct": 39.428309,
+      "baseline_tile_cloud_cover_pct": 26.689228,
+      "latest_local_vegetation_pixels": 100,
+      "baseline_local_vegetation_pixels": 102,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "bussaco": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Mata do Bussaco",
+      "region": "Centro",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 40.379,
+        "lon": -8.365
+      },
+      "metrics": {
+        "sampled_pixels": 201,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.854,
+        "latest_ndvi": 0.862,
+        "ndvi_difference": 0.009,
+        "baseline_red_green_ratio": 0.621,
+        "latest_red_green_ratio": 0.619,
+        "red_green_ratio_difference": -0.002
+      },
+      "latest_date": "2026-09-20",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2B_T29TNE_20260920T112238_L2A",
+      "baseline_scene": "S2B_T29TNE_20260831T112515_L2A",
+      "latest_tile_cloud_cover_pct": 0.002502,
+      "baseline_tile_cloud_cover_pct": 26.689228,
+      "latest_local_vegetation_pixels": 203,
+      "baseline_local_vegetation_pixels": 201,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "lousa": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Serra da Lousã",
+      "region": "Centro",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 40.092,
+        "lon": -8.235
+      },
+      "metrics": {
+        "sampled_pixels": 183,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.582,
+        "latest_ndvi": 0.546,
+        "ndvi_difference": -0.036,
+        "baseline_red_green_ratio": 1.053,
+        "latest_red_green_ratio": 0.936,
+        "red_green_ratio_difference": -0.117
+      },
+      "latest_date": "2026-10-07",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2A_T29TNE_20261007T112125_L2A",
+      "baseline_scene": "S2B_T29TNE_20260831T112515_L2A",
+      "latest_tile_cloud_cover_pct": 39.428309,
+      "baseline_tile_cloud_cover_pct": 26.689228,
+      "latest_local_vegetation_pixels": 169,
+      "baseline_local_vegetation_pixels": 190,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "mamede": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Serra de São Mamede",
+      "region": "Alentejo",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 39.39,
+        "lon": -7.377
+      },
+      "metrics": {
+        "sampled_pixels": 48,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.731,
+        "latest_ndvi": 0.68,
+        "ndvi_difference": -0.051,
+        "baseline_red_green_ratio": 0.892,
+        "latest_red_green_ratio": 0.881,
+        "red_green_ratio_difference": -0.011
+      },
+      "latest_date": "2026-10-07",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2A_T29SPD_20261007T112125_L2A",
+      "baseline_scene": "S2B_T29SPD_20260831T112515_L2A",
+      "latest_tile_cloud_cover_pct": 41.153672,
+      "baseline_tile_cloud_cover_pct": 0.015836,
+      "latest_local_vegetation_pixels": 51,
+      "baseline_local_vegetation_pixels": 180,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "vinhais": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Castanheiros de Vinhais",
+      "region": "Norte",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 41.836,
+        "lon": -7.005
+      },
+      "metrics": {
+        "sampled_pixels": 123,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.49,
+        "latest_ndvi": 0.666,
+        "ndvi_difference": 0.175,
+        "baseline_red_green_ratio": 1.295,
+        "latest_red_green_ratio": 0.985,
+        "red_green_ratio_difference": -0.309
+      },
+      "latest_date": "2026-10-07",
+      "baseline_date": "2026-08-21",
+      "latest_scene": "S2A_T29TPG_20261007T112125_L2A",
+      "baseline_scene": "S2B_T29TPG_20260821T112228_L2A",
+      "latest_tile_cloud_cover_pct": 35.012093,
+      "baseline_tile_cloud_cover_pct": 6.139976,
+      "latest_local_vegetation_pixels": 212,
+      "baseline_local_vegetation_pixels": 123,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "bertiandos": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Lagoas de Bertiandos",
+      "region": "Norte",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 41.788,
+        "lon": -8.628
+      },
+      "metrics": {
+        "sampled_pixels": 198,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.624,
+        "latest_ndvi": 0.741,
+        "ndvi_difference": 0.118,
+        "baseline_red_green_ratio": 0.943,
+        "latest_red_green_ratio": 0.792,
+        "red_green_ratio_difference": -0.151
+      },
+      "latest_date": "2026-10-08",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2C_T29TNG_20261008T113446_L2A",
+      "baseline_scene": "S2A_T29TNG_20260831T113332_L2A",
+      "latest_tile_cloud_cover_pct": 2.076111,
+      "baseline_tile_cloud_cover_pct": 22.491093,
+      "latest_local_vegetation_pixels": 215,
+      "baseline_local_vegetation_pixels": 198,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "sistelo": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Sistelo · Vale do Vez",
+      "region": "Norte",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 41.983,
+        "lon": -8.375
+      },
+      "metrics": {
+        "sampled_pixels": 226,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.766,
+        "latest_ndvi": 0.826,
+        "ndvi_difference": 0.06,
+        "baseline_red_green_ratio": 0.798,
+        "latest_red_green_ratio": 0.726,
+        "red_green_ratio_difference": -0.072
+      },
+      "latest_date": "2026-10-08",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2C_T29TNG_20261008T113446_L2A",
+      "baseline_scene": "S2A_T29TNG_20260831T113332_L2A",
+      "latest_tile_cloud_cover_pct": 2.076111,
+      "baseline_tile_cloud_cover_pct": 22.491093,
+      "latest_local_vegetation_pixels": 243,
+      "baseline_local_vegetation_pixels": 226,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "alvao": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Parque Natural do Alvão",
+      "region": "Norte",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 41.383,
+        "lon": -7.874
+      },
+      "metrics": {
+        "sampled_pixels": 235,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.646,
+        "latest_ndvi": 0.661,
+        "ndvi_difference": 0.016,
+        "baseline_red_green_ratio": 0.935,
+        "latest_red_green_ratio": 0.842,
+        "red_green_ratio_difference": -0.093
+      },
+      "latest_date": "2026-10-07",
+      "baseline_date": "2026-08-21",
+      "latest_scene": "S2A_T29TNF_20261007T112125_L2A",
+      "baseline_scene": "S2B_T29TNF_20260821T112228_L2A",
+      "latest_tile_cloud_cover_pct": 27.653524,
+      "baseline_tile_cloud_cover_pct": 0.502941,
+      "latest_local_vegetation_pixels": 214,
+      "baseline_local_vegetation_pixels": 246,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "paiva": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Passadiços do Paiva",
+      "region": "Norte",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 40.966,
+        "lon": -8.157
+      },
+      "metrics": {
+        "sampled_pixels": 90,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.588,
+        "latest_ndvi": 0.658,
+        "ndvi_difference": 0.07,
+        "baseline_red_green_ratio": 0.809,
+        "latest_red_green_ratio": 0.77,
+        "red_green_ratio_difference": -0.038
+      },
+      "latest_date": "2026-10-07",
+      "baseline_date": "2026-08-28",
+      "latest_scene": "S2A_T29TNF_20261007T112125_L2A",
+      "baseline_scene": "S2A_T29TNF_20260828T112349_L2A",
+      "latest_tile_cloud_cover_pct": 27.653524,
+      "baseline_tile_cloud_cover_pct": 73.441607,
+      "latest_local_vegetation_pixels": 198,
+      "baseline_local_vegetation_pixels": 90,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "freita": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Serra da Freita",
+      "region": "Norte",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 40.86,
+        "lon": -8.279
+      },
+      "metrics": {
+        "sampled_pixels": 128,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.644,
+        "latest_ndvi": 0.703,
+        "ndvi_difference": 0.058,
+        "baseline_red_green_ratio": 0.944,
+        "latest_red_green_ratio": 1.024,
+        "red_green_ratio_difference": 0.08
+      },
+      "latest_date": "2026-10-08",
+      "baseline_date": "2026-08-29",
+      "latest_scene": "S2C_T29TNF_20261008T113446_L2A",
+      "baseline_scene": "S2C_T29TNF_20260829T113659_L2A",
+      "latest_tile_cloud_cover_pct": 0.020219,
+      "baseline_tile_cloud_cover_pct": 18.672182,
+      "latest_local_vegetation_pixels": 131,
+      "baseline_local_vegetation_pixels": 154,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "caramulo": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Serra do Caramulo",
+      "region": "Centro",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 40.571,
+        "lon": -8.166
+      },
+      "metrics": {
+        "sampled_pixels": 171,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.597,
+        "latest_ndvi": 0.627,
+        "ndvi_difference": 0.03,
+        "baseline_red_green_ratio": 0.955,
+        "latest_red_green_ratio": 0.94,
+        "red_green_ratio_difference": -0.015
+      },
+      "latest_date": "2026-09-25",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2C_T29TNE_20260925T112610_L2A",
+      "baseline_scene": "S2B_T29TNE_20260831T112515_L2A",
+      "latest_tile_cloud_cover_pct": 30.684122,
+      "baseline_tile_cloud_cover_pct": 26.689228,
+      "latest_local_vegetation_pixels": 180,
+      "baseline_local_vegetation_pixels": 171,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "choupal": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Mata Nacional do Choupal",
+      "region": "Centro",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 40.222,
+        "lon": -8.44
+      },
+      "metrics": {
+        "sampled_pixels": 62,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.572,
+        "latest_ndvi": 0.578,
+        "ndvi_difference": 0.006,
+        "baseline_red_green_ratio": 1.02,
+        "latest_red_green_ratio": 1.072,
+        "red_green_ratio_difference": 0.052
+      },
+      "latest_date": "2026-09-20",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2B_T29TNE_20260920T112238_L2A",
+      "baseline_scene": "S2B_T29TNE_20260831T112515_L2A",
+      "latest_tile_cloud_cover_pct": 0.002502,
+      "baseline_tile_cloud_cover_pct": 26.689228,
+      "latest_local_vegetation_pixels": 57,
+      "baseline_local_vegetation_pixels": 62,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "setemontes": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Mata dos Sete Montes",
+      "region": "Centro",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 39.603,
+        "lon": -8.418
+      },
+      "metrics": {
+        "sampled_pixels": 148,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.701,
+        "latest_ndvi": 0.714,
+        "ndvi_difference": 0.012,
+        "baseline_red_green_ratio": 0.957,
+        "latest_red_green_ratio": 0.862,
+        "red_green_ratio_difference": -0.095
+      },
+      "latest_date": "2026-10-07",
+      "baseline_date": "2026-08-21",
+      "latest_scene": "S2A_T29SND_20261007T112125_L2A",
+      "baseline_scene": "S2B_T29SND_20260821T113003_L2A",
+      "latest_tile_cloud_cover_pct": 55.06683,
+      "baseline_tile_cloud_cover_pct": 1.221847,
+      "latest_local_vegetation_pixels": 163,
+      "baseline_local_vegetation_pixels": 148,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "pena": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Parque da Pena",
+      "region": "Lisboa",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 38.787,
+        "lon": -9.389
+      },
+      "metrics": {
+        "sampled_pixels": 231,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.839,
+        "latest_ndvi": 0.843,
+        "ndvi_difference": 0.004,
+        "baseline_red_green_ratio": 0.633,
+        "latest_red_green_ratio": 0.646,
+        "red_green_ratio_difference": 0.012
+      },
+      "latest_date": "2026-10-08",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2C_T29SMC_20261008T113446_L2A",
+      "baseline_scene": "S2A_T29SMC_20260831T113332_L2A",
+      "latest_tile_cloud_cover_pct": 0.006617,
+      "baseline_tile_cloud_cover_pct": 0.739425,
+      "latest_local_vegetation_pixels": 229,
+      "baseline_local_vegetation_pixels": 231,
+      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+    },
+    "monserrate": {
+      "status": "experimental",
+      "validated": false,
+      "stage": null,
+      "model": "sentinel2_summer_comparison_experimental_v1",
+      "site_name": "Parque de Monserrate",
+      "region": "Lisboa",
+      "sampling_scope": "representative_point_400m",
+      "site_center": {
+        "lat": 38.793,
+        "lon": -9.419
+      },
+      "metrics": {
+        "sampled_pixels": 247,
+        "sampling_resolution_m": 20,
+        "baseline_ndvi": 0.819,
+        "latest_ndvi": 0.839,
+        "ndvi_difference": 0.02,
+        "baseline_red_green_ratio": 0.681,
+        "latest_red_green_ratio": 0.669,
+        "red_green_ratio_difference": -0.013
+      },
+      "latest_date": "2026-10-08",
+      "baseline_date": "2026-08-31",
+      "latest_scene": "S2C_T29SMC_20261008T113446_L2A",
+      "baseline_scene": "S2A_T29SMC_20260831T113332_L2A",
+      "latest_tile_cloud_cover_pct": 0.006617,
+      "baseline_tile_cloud_cover_pct": 0.739425,
+      "latest_local_vegetation_pixels": 244,
+      "baseline_local_vegetation_pixels": 247,
       "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
     }
   }
