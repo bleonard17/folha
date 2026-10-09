@@ -192,6 +192,31 @@
   "Romantic parkland with a diverse botanical collection. Some specimens change color while abundant evergreen trees remain green. Admission may be required.": "Parque romântico com uma coleção botânica variada. Algumas espécies mudam de cor, enquanto muitas árvores perenes continuam verdes. Pode ser necessário bilhete.",
   "An ornate botanical garden with varied deciduous and evergreen trees, misty paths and a historic palace.": "Jardim botânico ornamental com árvores caducifólias e perenes, caminhos envoltos em neblina e um palácio histórico."
 };
+  Object.assign(pt, {
+    "Sentinel-2 · Satellite pilot": "Sentinel-2 · Projeto-piloto por satélite",
+    "Measured vegetation change": "Alteração da vegetação medida",
+    "Experimental": "Experimental",
+    "Actual satellite reflectance measurements for this location, compared with a summer reference.": "Medições reais da refletância por satélite neste local, comparadas com uma referência do verão.",
+    "This does not verify autumn leaf colors.": "Isto não confirma as cores das folhas no outono.",
+    "Latest clear scene": "Imagem recente sem nuvens",
+    "Summer reference": "Referência do verão",
+    "NDVI difference": "Diferença de NDVI",
+    "Red/green difference": "Diferença vermelho/verde",
+    "comparable 20m pixels. NDVI is a vegetation index; changes can reflect species, shadows, weather or stress—not just autumn color. No foliage stage has been verified.": "píxeis comparáveis de 20 m. O NDVI é um índice de vegetação; as alterações podem refletir espécies, sombras, meteorologia ou stress — não apenas cores de outono. Nenhuma fase foi verificada.",
+    "No usable satellite comparison yet": "Ainda sem comparação de satélite utilizável",
+    "No suitable clear imagery is available.": "Não existem imagens adequadas sem nuvens.",
+    "The scheduled analysis will retry. Foliage stages above remain weather-informed estimates, not satellite-verified colors.": "A análise agendada voltará a tentar. As fases acima continuam a ser estimativas meteorológicas, não cores verificadas por satélite.",
+    "Satellite analysis pending": "Análise de satélite pendente",
+    "Outside the satellite pilot": "Fora do projeto-piloto por satélite",
+    "This destination is included in the two-forest Sentinel-2 experiment. Weather-based foliage estimates remain separate from measured vegetation changes.": "Este destino integra o projeto-piloto Sentinel-2 com duas florestas. As estimativas baseadas na meteorologia são independentes das alterações medidas na vegetação.",
+    "The first satellite experiment covers Parque da Cabreia and Bosque das Faias. This location currently has only weather-informed foliage estimates.": "A primeira experiência por satélite abrange o Parque da Cabreia e o Bosque das Faias. Este local dispõe apenas de estimativas baseadas na meteorologia.",
+    "Satellite search or imagery sampling failed:": "Falhou a pesquisa ou leitura das imagens de satélite:",
+    "Insufficient cloud-free forest pixels in sampled scenes": "Píxeis de floresta sem nuvens insuficientes nas imagens analisadas",
+    "No Sentinel-2 scenes found in one of the comparison windows": "Não foram encontradas imagens Sentinel-2 num dos períodos de comparação",
+    "Fewer than 30 common clear vegetated reference pixels": "Menos de 30 píxeis de referência com vegetação comparáveis e sem nuvens",
+    "Outside northern Portugal foliage monitoring season": "Fora da época de acompanhamento da folhagem no norte de Portugal",
+    "Explore imagery ↗": "Explorar imagens ↗"
+  });
   const original=new WeakMap();
   const labels=new WeakMap();
   let lang='en';
