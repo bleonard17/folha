@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-10T15:35:00+00:00",
+  "generated_at": "2026-11-17T16:53:50+00:00",
   "source": "Element 84 Earth Search Sentinel-2 C1 L2A",
   "source_url": "https://earth-search.aws.element84.com/v1",
   "method": "Cloud-screened 400 m sample around each representative map coordinate compared with summer; NOT verified autumn leaf color or region-wide vegetation",
@@ -184,19 +184,19 @@
         "sampled_pixels": 201,
         "sampling_resolution_m": 20,
         "baseline_ndvi": 0.854,
-        "latest_ndvi": 0.854,
-        "ndvi_difference": 0.0,
+        "latest_ndvi": 0.817,
+        "ndvi_difference": -0.037,
         "baseline_red_green_ratio": 0.621,
-        "latest_red_green_ratio": 0.74,
-        "red_green_ratio_difference": 0.119
+        "latest_red_green_ratio": 0.671,
+        "red_green_ratio_difference": 0.05
       },
-      "latest_date": "2026-11-04",
+      "latest_date": "2026-11-14",
       "baseline_date": "2026-08-31",
-      "latest_scene": "S2C_T29TNE_20261104T112644_L2A",
+      "latest_scene": "S2C_T29TNE_20261114T112820_L2A",
       "baseline_scene": "S2B_T29TNE_20260831T112515_L2A",
-      "latest_tile_cloud_cover_pct": 0.004363,
+      "latest_tile_cloud_cover_pct": 41.383913,
       "baseline_tile_cloud_cover_pct": 26.689228,
-      "latest_local_vegetation_pixels": 215,
+      "latest_local_vegetation_pixels": 221,
       "baseline_local_vegetation_pixels": 201,
       "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
     },
@@ -504,19 +504,19 @@
         "sampled_pixels": 62,
         "sampling_resolution_m": 20,
         "baseline_ndvi": 0.572,
-        "latest_ndvi": 0.592,
-        "ndvi_difference": 0.02,
+        "latest_ndvi": 0.61,
+        "ndvi_difference": 0.038,
         "baseline_red_green_ratio": 1.02,
-        "latest_red_green_ratio": 1.065,
-        "red_green_ratio_difference": 0.045
+        "latest_red_green_ratio": 0.965,
+        "red_green_ratio_difference": -0.055
       },
-      "latest_date": "2026-11-04",
+      "latest_date": "2026-11-14",
       "baseline_date": "2026-08-31",
-      "latest_scene": "S2C_T29TNE_20261104T112644_L2A",
+      "latest_scene": "S2C_T29TNE_20261114T112820_L2A",
       "baseline_scene": "S2B_T29TNE_20260831T112515_L2A",
-      "latest_tile_cloud_cover_pct": 0.004363,
+      "latest_tile_cloud_cover_pct": 41.383913,
       "baseline_tile_cloud_cover_pct": 26.689228,
-      "latest_local_vegetation_pixels": 53,
+      "latest_local_vegetation_pixels": 60,
       "baseline_local_vegetation_pixels": 62,
       "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
     },
@@ -553,7 +553,7 @@
       "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
     },
     "pena": {
-      "status": "experimental",
+      "status": "unavailable",
       "validated": false,
       "stage": null,
       "model": "sentinel2_summer_comparison_experimental_v1",
@@ -564,25 +564,11 @@
         "lat": 38.787,
         "lon": -9.389
       },
-      "metrics": {
-        "sampled_pixels": 231,
-        "sampling_resolution_m": 20,
-        "baseline_ndvi": 0.839,
-        "latest_ndvi": 0.842,
-        "ndvi_difference": 0.003,
-        "baseline_red_green_ratio": 0.633,
-        "latest_red_green_ratio": 0.674,
-        "red_green_ratio_difference": 0.041
-      },
-      "latest_date": "2026-11-04",
-      "baseline_date": "2026-08-31",
-      "latest_scene": "S2C_T29SMC_20261104T112644_L2A",
-      "baseline_scene": "S2A_T29SMC_20260831T113332_L2A",
-      "latest_tile_cloud_cover_pct": 0.034714,
-      "baseline_tile_cloud_cover_pct": 0.739425,
-      "latest_local_vegetation_pixels": 224,
-      "baseline_local_vegetation_pixels": 231,
-      "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
+      "reason": "Insufficient cloud-free forest pixels in sampled scenes",
+      "available_scene_count": {
+        "recent": 40,
+        "baseline": 40
+      }
     },
     "monserrate": {
       "status": "experimental",
@@ -597,22 +583,22 @@
         "lon": -9.419
       },
       "metrics": {
-        "sampled_pixels": 247,
+        "sampled_pixels": 56,
         "sampling_resolution_m": 20,
         "baseline_ndvi": 0.819,
-        "latest_ndvi": 0.865,
-        "ndvi_difference": 0.046,
-        "baseline_red_green_ratio": 0.681,
-        "latest_red_green_ratio": 0.655,
-        "red_green_ratio_difference": -0.027
+        "latest_ndvi": 0.836,
+        "ndvi_difference": 0.016,
+        "baseline_red_green_ratio": 0.663,
+        "latest_red_green_ratio": 0.602,
+        "red_green_ratio_difference": -0.061
       },
-      "latest_date": "2026-11-04",
+      "latest_date": "2026-11-12",
       "baseline_date": "2026-08-31",
-      "latest_scene": "S2C_T29SMC_20261104T112644_L2A",
+      "latest_scene": "S2B_T29SMC_20261112T114000_L2A",
       "baseline_scene": "S2A_T29SMC_20260831T113332_L2A",
-      "latest_tile_cloud_cover_pct": 0.034714,
+      "latest_tile_cloud_cover_pct": 19.486798,
       "baseline_tile_cloud_cover_pct": 0.739425,
-      "latest_local_vegetation_pixels": 242,
+      "latest_local_vegetation_pixels": 54,
       "baseline_local_vegetation_pixels": 247,
       "reason": "Measured spectral vegetation differences; NOT a verified foliage-color stage."
     }
