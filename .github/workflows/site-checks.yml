@@ -1,0 +1,33 @@
+name: folha static site regression checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - i18n.js
+      - CNAME
+      - tests/site-regression.test.cjs
+      - .github/workflows/site-checks.yml
+  pull_request:
+    paths:
+      - index.html
+      - i18n.js
+      - CNAME
+      - tests/site-regression.test.cjs
+      - .github/workflows/site-checks.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/site-regression.test.cjs
