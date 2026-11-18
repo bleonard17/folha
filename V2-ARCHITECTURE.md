@@ -1,32 +1,43 @@
-# folha. — V2 roadmap and technical architecture
+# folha. — Architecture and validation roadmap
 
-## Shipped in V2a
-- MapLibre GL JS v5.6.0 with OpenFreeMap Liberty (landscape/detailed) and Positron (minimal) vector styles. Both are free to use with attribution and currently need no API key.
-- Separate color-coded destination markers and a persistent map selection interaction.
-- Built-in geographic outline fallback when tiles or MapLibre fail to load. **No use of OSM volunteer raster tile servers.**
-- Satellite-readiness section in selected destination details, backed by an optional JSON feed (`data/satellite-observations.json`). The feed is **empty** because no satellite-derived foliage scores have been computed.
-- Open Copernicus Browser link for manual satellite inspection (users search destinations inside Copernicus Browser).
+_Reviewed 18 November 2026. Source of truth: [index.html](index.html), [scripts/satellite_probe.py](scripts/satellite_probe.py), [satellite workflow](.github/workflows/satellite.yml) and [data feed](data/satellite-observations.json)._
 
-## V2b — Real satellite analysis (not implemented)
-1. Define a **forested area of interest (AOI) polygon** for each destination rather than querying just a central point. Mask evergreen stands, roads, roofs, shadows, and water. AOIs and species metadata need manual validation.
-2. Discover recent Sentinel-2 Level-2A imagery through Copernicus Data Space Ecosystem's **STAC endpoint**: `https://stac.dataspace.copernicus.eu/v1/`. Check per-scene and pixel-level clouds and shadow. Scene-wide cloud cover is **not** a reliable measure of local visibility.
-3. Authenticated Sentinel Hub Process/Statistical APIs can compute per-AOI reflectance and vegetation indices (e.g., NDVI and visible red/green ratios) on clear pixels, comparing with species-aware autumn baseline, earlier clear dates, and matched previous-year conditions. An index by itself cannot prove autumn color; distinguish senescence from drought and land-cover changes.
-4. Generate an observation only after a reproducible validation rule: plausible AOI canopy coverage, cloud-free pixel threshold, enough clear observations, observation timestamp, and confidence calibrated against trusted local photography/reports. Otherwise leave it unverified.
-5. Run batch processing on a **scheduled GitHub Actions workflow**, with Copernicus API credentials in **GitHub Actions Secrets** (never in JavaScript). Publish a small JSON file to the repository. GitHub Pages remains a static, free frontend.
-6. Record provenance and methodology, and avoid mixing satellite observation from days ago with a future visit-date forecast. Present separately: `Estimated stage for selected date` vs `Last satellite-observed stage as of YYYY-MM-DD`.
+## Production architecture
 
-## Observation JSON schema
-`data/satellite-observations.json` has `schema_version: 1`, `generated_at`, `methodology`, and `destinations` object keyed by site ID. A site may be displayed only when it has `validated: true`, `observed_on: YYYY-MM-DD`, `stage` from `early/turning/peak/late`, and `confidence` between 0 and 1. **Do not manually fabricate these entries.** Future schema should also carry AOI, scene IDs, cloud-free pixel fraction, baseline dates and model version before deployment.
+- **Hosting:** GitHub Pages, canonical custom domain **https://folha.trilho.dev/** via [CNAME](CNAME); Cloudflare provides DNS only for the subdomain.
+- **Frontend:** Static [index.html](index.html), translation dictionary and localization in [i18n.js](i18n.js), bilingual [privacy / methods notice](privacy.html). All data is visible client-side; no account or backend is needed.
+- **Maps:** MapLibre GL JS with OpenFreeMap Liberty / Positron vector styles, markers/popups, clustering at overview zoom and an interactive bundled SVG fallback. This is **cartography**, not satellite imagery.
+- **Foliage forecast:** Approximate seasonal peak calendar, simple temperature-history shifts, forecast rain and wind. The displayed stage and timing score are **planning heuristics**, not observed canopy colors.
+- **Satellite observations:** Weekly September–December, four regional GitHub Actions jobs (Norte, Centro, Lisboa, Alentejo) run [scripts/satellite_probe.py](scripts/satellite_probe.py). A merger validates all **19** site IDs before committing a JSON feed. The app reads the freshest GitHub raw JSON with a bundled-file fallback because bot-generated commits do not trigger a GitHub Pages rebuild.
+- **Imagery source:** Element 84 [Earth Search STAC](https://earth-search.aws.element84.com/v1), Sentinel-2 Level 2A band COGs (red, green, NIR and SCL). No commercial Copernicus API credentials are currently required.
+- **Observation semantics:** Locally cloud-screened approximately **400 × 400 m sample** centered on each map pin; compare recent NDVI and red/green ratios against a July–August reference scene. A sample is neither an entire park nor a reliable representation of every species or leaf color. The output stays `validated:false` and `stage:null` even where real satellite measurements exist.
+- **Status data:** `experimental` indicates actual measured spectral differences with acquisition dates; `unavailable` means no qualifying paired observations. Do not treat lack of data as green foliage. The frontend never translates these data into a verified peak-color class.
 
-## Caveats
-- OpenFreeMap is a free third-party community service, not an SLA-backed service. Keep the built-in fallback to avoid map outages breaking the app.
-- The main map's `Landscape` style is a detailed street/landscape vector **cartography**, not a satellite view or elevation/terrain DEM.
-- Copernicus data may require free registration and authenticated API credentials for processing. Map viewing and external imagery browsing do not provide an automatic foliage score.
-- GitHub Pages is a static site. Use Actions for scheduled processing, not browser-embedded credentials.
+## Remaining scientific work (not implemented)
+
+1. **Validate forest boundaries and sample placement.** Replace representative points with curated polygons; exclude evergreen stands, roads, buildings, water, and open ground. Map current markers are *not* guaranteed trailheads.
+2. **Validate against dated local photographs / ground reports.** Define species-specific color stages and calibration before claiming satellite-derived foliage onset, peak or confidence.
+3. **Handle temporal and atmospheric differences.** Multiple matched clear observations, cloud/shadow and terrain screening, cross-year baselines and drought/storm confounders are not solved by two simple spectral indices.
+4. **Document confidence only with evidence.** Avoid displaying a fabricated confidence score when coverage is sparse, or reinterpreting NDVI alone as a tree-color measurement.
+5. **Expand beyond the 19 curated mainland points only after validating sample representativeness.** The four regional labels refer to the *existing tracked destinations*, not full satellite coverage of those regions or the Azores/Madeira.
+
+## Data contract
+
+The committed [JSON](data/satellite-observations.json) uses `schema_version:1`, `generated_at`, `source`, `method`, `sampling_scope`, and a `destinations` dictionary keyed by ID. Each record stores `region`, `site_center`, `validated:false`, `stage:null`, `status`; measured records also hold `latest_date`, `baseline_date`, source scene IDs, NDVI/red-green metrics and paired pixel counts.
+
+A future validated leaf-color stage would require **a new, separately reviewed evidence model**. Do not populate `validated:true` or `stage` merely because a cloud-free scene exists.
+
+## Operations and limitations
+
+- The scheduled workflow is [satellite.yml](.github/workflows/satellite.yml). [Tests](tests/test_satellite_probe.py) enforce regional completeness and fail on fabricated leaf stages.
+- [Social preview workflow](.github/workflows/social-preview.yml) renders the artwork in [social-preview.svg](social-preview.svg) to [og-image.png](og-image.png) for WhatsApp / iMessage.
+- OpenFreeMap and Earth Search are third-party services without an application-specific uptime guarantee. A map fallback and a lack-of-satellite-data state are intentional.
+- Avoid adding a Cloudflare Worker / database or moving the site off Pages without a concrete feature that requires it.
 
 ## References
+
 - https://openfreemap.org/quick_start/
 - https://maplibre.org/maplibre-gl-js/docs/
-- https://documentation.dataspace.copernicus.eu/APIs/STAC.html
-- https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/UserGuides/BeginnersGuide.html
-- https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+- https://earth-search.aws.element84.com/v1
+- https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED
+- https://docs.github.com/en/pages
