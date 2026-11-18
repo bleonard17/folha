@@ -175,7 +175,7 @@
     const dateAdd = (s,d) => new Date(parseDate(s).getTime()+d*DAY).toISOString().slice(0,10);
     const dayDiff = (a,b) => Math.round((parseDate(a)-parseDate(b))/DAY);
     const fmt = (s,o={month:'short',day:'numeric'}) => parseDate(s).toLocaleDateString(window.folhaLanguage==='pt'?'pt-PT':'en-US',{timeZone:'UTC',...o});
-    const thisSeasonYear = Number(today.slice(0,4)) + (Number(today.slice(5,7))===12 && Number(today.slice(8,10))>20 ? 1 : 0);
+    const thisSeasonYear = Number(today.slice(0,4)) + (Number(today.slice(5,7))===12 && Number(today.slice(8,10))>15 ? 1 : 0);
     const peakDate = (p,year=thisSeasonYear) => `${year}-${p.peak}`;
     const firstSaturday = s => {const w=parseDate(s).getUTCDay();return dateAdd(s,(6-w+7)%7)};
     const forecastWeather = p => state.weather[p.id] || null;
