@@ -22,7 +22,22 @@ This is a static website; `index.html` contains the main application, `i18n.js` 
 
 Foliage stage and peak dates are **experimental estimates**, using typical regional timing and available weather signals. **They are not verified observations of leaf colors** and should not be treated as precise forecasts. Real peak timing varies with tree species, elevation, temperature, drought, storms, and local conditions.
 
-NaN## Extended destinations (October 2026)
+## Deployment and maintenance
+
+- **Canonical URL:** https://folha.trilho.dev/; GitHub Pages publishes from branch `main`, root `/`, using the repository [CNAME](CNAME).
+- **DNS:** Cloudflare holds a DNS-only CNAME for `folha.trilho.dev` pointing to `bleonard17.github.io`. GitHub Pages manages HTTPS.
+- **Source:** [index.html](index.html) contains the application, [i18n.js](i18n.js) manages translation, [privacy.html](privacy.html) contains the bilingual privacy and methodology notice.
+- **Social sharing:** [social-preview.svg](social-preview.svg) is editable artwork, and [social-preview.yml](.github/workflows/social-preview.yml) builds [og-image.png](og-image.png).
+- **Satellite:** [satellite.yml](.github/workflows/satellite.yml) runs Tuesday scans in September–December, updating [data/satellite-observations.json](data/satellite-observations.json). Measurements remain experimental and do not verify leaf colors.
+- **Regression checks:** [site-regression.test.cjs](tests/site-regression.test.cjs) checks static-site invariants, and [site-checks.yml](.github/workflows/site-checks.yml) runs it automatically when the interface changes. Run locally with `node --test tests/site-regression.test.cjs`.
+
+## Interactive map and satellite observations
+
+- MapLibre GL JS uses OpenFreeMap vector tiles, interactive markers, popups and clustering; a bundled SVG outline works when map services fail.
+- The 19 curated mainland destinations show weather-informed estimated peak dates and separate satellite observations.
+- For scientific validation and work still outstanding, see [Architecture and validation roadmap](V2-ARCHITECTURE.md).
+
+## Extended destinations (October 2026)
 
 Ten additional destinations have been curated mainly north of Lisbon: Vinhais chestnut groves, Lagoas de Bertiandos, Sistelo, Alvão Natural Park, Paiva Walkways, Serra da Freita, Serra do Caramulo, Mata Nacional do Choupal, Mata dos Sete Montes, and Parque da Pena.
 
